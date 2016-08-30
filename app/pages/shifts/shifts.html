@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-navbar no-border-bottom>
+    <ion-title>Shifts</ion-title>
+    <ion-buttons start>
+      <button menuToggle>
+      	<ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-buttons end>
+      <button (click)="addShift()">
+        <ion-icon name="add"></ion-icon>
+      </button>
+      <button (click)="filterChange()">
+        Filters
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher (ionRefresh)="refreshShifts($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-list>
+    <ion-item-sliding *ngFor="let shift of shifts">
+      <button ion-item (click)="viewShift(shift)">
+        <h2><b>{{shift.startTime | date:"fullDate"}}</b></h2>
+        <h3>{{shift.startTime | date:"shortTime"}} to {{shift.endTime | date:"shortTime"}}</h3>
+        <h3>Waypoints: {{shift.waypoints.length}}</h3>
+      </button>
+      <ion-item-options side="right">
+        <button danger (click)="deleteShift(shift)">
+          <ion-icon name="trash"></ion-icon>
+          Delete
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+</ion-content>
