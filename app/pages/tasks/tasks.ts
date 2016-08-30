@@ -1,19 +1,40 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { AlertController, App, ItemSliding, List, ModalController, NavController } from 'ionic-angular';
+import { UserData } from '../../providers/user-data';
+import { DeliveryData } from '../../providers/delivery-data';
 
-/*
-  Generated class for the TasksPage page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
 @Component({
   templateUrl: 'build/pages/tasks/tasks.html',
 })
 export class TasksPage {
 
-  constructor(private navCtrl: NavController) {
+  currentShift: any = 'none';
+  currentTask = {};
 
+  constructor (
+    public alertCtrl: AlertController,
+    public app: App,
+    public modalCtrl: ModalController,
+    public navCtrl: NavController,
+    public delivData: DeliveryData,
+    public user: UserData
+  ) { }
+
+  ngOnInit() {
+    this.delivData.getShifts()
+    .subscribe(data => {
+    }, err => {
+      this.handleError(err);
+    });
+  }
+
+  handleError(err) {
+    let alert = this.alertCtrl.create({
+      title: 'Problem with server',
+      subTitle: err,
+      buttons: ['OK']
+    });
+    alert.present();
   }
 
 }
