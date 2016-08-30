@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { DeliveryData } from './delivery-data';
 import { Events, LocalStorage, Storage } from 'ionic-angular';
 
 @Injectable()
@@ -48,7 +47,24 @@ export class UserData {
   }
 
   getCurrentShift() {
-    return this.CURRENTSHIFT;
+    if (this.CURRENTSHIFT) {
+      return this.CURRENTSHIFT;
+    }
+    // let filters = {
+    //   start: new Date(new Date().setHours(0,0,0,0)),
+    //   end: new Date(new Date().setHours(47,59,0,0))
+    // };
+    // this.delivData.getShifts(filters)
+    // .subscribe(data => {
+    //   this.CURRENTSHIFT = data[0];
+    //   return this.CURRENTSHIFT;
+    // }, err => {
+    //   this.handleError(err);
+    // });
+  }
+
+  handleError(err) {
+    console.log('error fetching current shift');
   }
 
 //   setCurrentShift(shift) {

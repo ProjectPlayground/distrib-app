@@ -21,11 +21,7 @@ export class TasksPage {
   ) { }
 
   ngOnInit() {
-    this.delivData.getShifts()
-    .subscribe(data => {
-    }, err => {
-      this.handleError(err);
-    });
+
   }
 
   handleError(err) {

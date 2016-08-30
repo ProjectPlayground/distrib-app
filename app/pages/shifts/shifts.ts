@@ -53,7 +53,6 @@ export class ShiftsPage {
   	this.delivData.getShifts(this.filters)
   	.subscribe(data => {
       this.shifts = data;
-      this.currentShift = data[0];
   	}, err => {
       this.handleError(err);
     });

@@ -7,7 +7,7 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class DeliveryData {
 
-  apiUrl = 'https://d100b92d.ngrok.io/api/';
+  apiUrl = 'https://ee1039d0.ngrok.io/api/';
 
   constructor(public http: Http, public user: UserData) {}
 

@@ -4,7 +4,7 @@ import { StatusBar, Splashscreen } from 'ionic-native';
 import { DeliveryData } from './providers/delivery-data';
 import { UserData } from './providers/user-data';
 import { TabsPage } from './pages/tabs/tabs';
-import { UserPage } from './pages/user/user';
+import { NavigationPage } from './pages/navigation/navigation';
 
 // maps api key ios AIzaSyCfZs1op2mxz8ccYaxK-1rHM76xEKDulc4
 // map api key android  AIzaSyCAS2mmMbeDNeXLKC6EpMlNbujnwhxEm4g

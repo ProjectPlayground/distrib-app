@@ -1,21 +1,35 @@
-import { Component } from '@angular/core';
-import { NavController, Platform } from 'ionic-angular';
-import { UserData } from '../../providers/user-data';
-import { DeliveryData } from '../../providers/delivery-data';
-
+import {Component, ViewChild, ElementRef} from '@angular/core';
+import {NavController} from 'ionic-angular';
+ 
+declare var google;
+ 
 @Component({
-  templateUrl: 'build/pages/navigation/navigation.html',
+  templateUrl: 'build/pages/navigation/navigation.html'
 })
 export class NavigationPage {
-
-  constructor (
-    public navCtrl: NavController,
-    public platform: Platform,
-    public delivData: DeliveryData,
-    public user: UserData
-  ) { }
-
-  ionViewLoaded() {
+ 
+  @ViewChild('map') mapElement: ElementRef;
+  map: any;
+ 
+  constructor(public navCtrl: NavController) {
+ 
   }
-
+ 
+  ionViewLoaded(){
+    this.loadMap();
+  }
+ 
+  loadMap(){
+ 
+    let latLng = new google.maps.LatLng(-34.9290, 138.6010);
+ 
+    let mapOptions = {
+      center: latLng,
+      zoom: 15,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    }
+ 
+    this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+ 
+  }
 }
