@@ -1,19 +1,21 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, Platform } from 'ionic-angular';
+import { UserData } from '../../providers/user-data';
+import { DeliveryData } from '../../providers/delivery-data';
 
-/*
-  Generated class for the NavigationPage page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
 @Component({
   templateUrl: 'build/pages/navigation/navigation.html',
 })
 export class NavigationPage {
 
-  constructor(private navCtrl: NavController) {
+  constructor (
+    public navCtrl: NavController,
+    public platform: Platform,
+    public delivData: DeliveryData,
+    public user: UserData
+  ) { }
 
+  ionViewLoaded() {
   }
 
 }
