@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Events, LocalStorage, Storage } from 'ionic-angular';
+import { DeliveryData } from './delivery-data';
 
 @Injectable()
 export class UserData {
   HAS_LOGGED_IN = 'hasLoggedIn';
-  USERID = "57c478c021527d402c6cc20f";
+  USERID = "10004";
   CURRENTSHIFT: any;
   storage = new Storage(LocalStorage);
 
-  constructor(public events: Events) {}
+  constructor (public events: Events) {}
 
   login(username) {
     this.storage.set(this.HAS_LOGGED_IN, true);
@@ -47,20 +48,7 @@ export class UserData {
   }
 
   getCurrentShift() {
-    if (this.CURRENTSHIFT) {
-      return this.CURRENTSHIFT;
-    }
-    // let filters = {
-    //   start: new Date(new Date().setHours(0,0,0,0)),
-    //   end: new Date(new Date().setHours(47,59,0,0))
-    // };
-    // this.delivData.getShifts(filters)
-    // .subscribe(data => {
-    //   this.CURRENTSHIFT = data[0];
-    //   return this.CURRENTSHIFT;
-    // }, err => {
-    //   this.handleError(err);
-    // });
+    return this.CURRENTSHIFT;
   }
 
   handleError(err) {

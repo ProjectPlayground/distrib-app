@@ -46,9 +46,9 @@ export class MyApp {
   constructor (
     public events: Events,
     public userData: UserData,
+    public delivData: DeliveryData,
     public menu: MenuController,
-    platform: Platform,
-    delivData: DeliveryData
+    platform: Platform
   ) {
     // Call any initial plugins when ready
     platform.ready().then(() => {

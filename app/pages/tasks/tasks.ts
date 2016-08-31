@@ -8,8 +8,8 @@ import { DeliveryData } from '../../providers/delivery-data';
 })
 export class TasksPage {
 
-  currentShift: any = 'none';
-  currentTask = {};
+  activeShift: any;
+  currentTask: any;
 
   constructor (
     public alertCtrl: AlertController,
@@ -21,7 +21,16 @@ export class TasksPage {
   ) { }
 
   ngOnInit() {
+    this.getActiveShift();
+  }
 
+  getActiveShift() {
+    this.delivData.getShifts({start: new Date()})
+    .subscribe(data => {
+      this.activeShift = data[0];
+    }, err => {
+      this.handleError(err);
+    });
   }
 
   handleError(err) {

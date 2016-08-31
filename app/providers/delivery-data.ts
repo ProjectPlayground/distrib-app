@@ -7,9 +7,9 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class DeliveryData {
 
-  apiUrl = 'https://ee1039d0.ngrok.io/api/';
+  apiUrl = 'https://02d43c67.ngrok.io/api/';
 
-  constructor(public http: Http, public user: UserData) {}
+  constructor (public http: Http, public user: UserData) {}
 
   getShifts(filters?) {
     let query = this.apiUrl+'shifts?driver='+this.user.getUserID();
