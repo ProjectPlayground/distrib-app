@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { AlertController, App, ItemSliding, List, ModalController, NavController } from 'ionic-angular';
+import { AlertController, App, ItemSliding, List, NavController } from 'ionic-angular';
 import { UserData } from '../../providers/user-data';
 import { DeliveryData } from '../../providers/delivery-data';
+import { TaskPage } from '../../pages/task/task';
 
 @Component({
   templateUrl: 'build/pages/tasks/tasks.html',
@@ -15,7 +16,6 @@ export class TasksPage {
   constructor (
     public alertCtrl: AlertController,
     public app: App,
-    public modalCtrl: ModalController,
     public navCtrl: NavController,
     public delivData: DeliveryData,
     public user: UserData
@@ -25,6 +25,10 @@ export class TasksPage {
     this.getCurrentShift();
   }
 
+  viewTask(task, i) {
+    this.navCtrl.push(TaskPage, task, i);
+  }
+
   refreshShift(refresher) {
     this.getCurrentShift();
     setTimeout(() => {
@@ -32,12 +36,10 @@ export class TasksPage {
     }, 1000);
   }
 
-
   getCurrentShift() {
     this.delivData.getShifts({start: new Date()})
     .subscribe(data => {
       this.currentShift = data[0];
-      console.log(this.currentShift);
     }, err => {
       this.handleError(err);
     });

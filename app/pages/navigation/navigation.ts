@@ -15,7 +15,7 @@ export class NavigationPage {
   activeShift: any;
   currentTask: any;
   labelIndex = 0;
-  labels = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+  alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
  
   constructor (
     public navCtrl: NavController,
@@ -56,7 +56,7 @@ export class NavigationPage {
   addMarker(location) {
     var marker = new google.maps.Marker({
       position: location,
-      label: this.labels[this.labelIndex++],
+      label: this.alphabet[this.labelIndex++],
       map: this.map
     });
   }
