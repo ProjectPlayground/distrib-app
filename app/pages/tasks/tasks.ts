@@ -8,8 +8,9 @@ import { DeliveryData } from '../../providers/delivery-data';
 })
 export class TasksPage {
 
-  activeShift: any;
-  currentTask: any;
+  currentShift: any = {};
+  currentTask: any = {};
+  alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
   constructor (
     public alertCtrl: AlertController,
@@ -21,16 +22,29 @@ export class TasksPage {
   ) { }
 
   ngOnInit() {
-    this.getActiveShift();
+    this.getCurrentShift();
   }
 
-  getActiveShift() {
+  refreshShift(refresher) {
+    this.getCurrentShift();
+    setTimeout(() => {
+      refresher.complete();
+    }, 1000);
+  }
+
+
+  getCurrentShift() {
     this.delivData.getShifts({start: new Date()})
     .subscribe(data => {
-      this.activeShift = data[0];
+      this.currentShift = data[0];
+      console.log(this.currentShift);
     }, err => {
       this.handleError(err);
     });
+  }
+
+  getMinutes(seconds) {
+    return Math.round(seconds/60);
   }
 
   handleError(err) {
