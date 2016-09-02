@@ -2,14 +2,15 @@ import { Component } from '@angular/core';
 import { AlertController, App, ItemSliding, List, NavController } from 'ionic-angular';
 import { UserData } from '../../providers/user-data';
 import { DeliveryData } from '../../providers/delivery-data';
-import { TaskPage } from '../../pages/task/task';
 
 @Component({
-  templateUrl: 'build/pages/tasks/tasks.html',
+  templateUrl: 'build/pages/distrib/distrib.html',
 })
-export class TasksPage {
+export class DistribPage {
 
   currentShift: any = {};
+  currentTask: any = {};
+  shiftComplete = false;
   alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
   constructor (
@@ -20,15 +21,11 @@ export class TasksPage {
     public user: UserData
   ) { }
 
-  ngOnInit() {
+	ngOnInit() {
     this.getCurrentShift();
   }
 
-  viewTask(task, i) {
-    this.navCtrl.push(TaskPage, task, i);
-  }
-
-  refreshShift(refresher) {
+  refresh(refresher) {
     this.getCurrentShift();
     setTimeout(() => {
       refresher.complete();
@@ -38,11 +35,25 @@ export class TasksPage {
   getCurrentShift() {
     this.delivData.getShifts({start: new Date()})
     .subscribe(data => {
-      this.currentShift = data[0];
-      console.log(this.currentShift);
+      this.currentShift = data[0];    
+      this.getCurrentTask();
     }, err => {
       this.handleError(err);
     });
+  }
+
+  getCurrentTask() {
+  	for (let i = 0; i < this.currentShift.waypoints.length; i++) {
+  		let task = this.currentShift.waypoints[i];
+  		if ( task.status==="active") { 
+  			this.currentTask = task; 
+  			return;
+  		} else if (task.status==="incomplete") {
+  			this.currentTask = task; 
+  			return;
+  		}
+  	}
+  	this.shiftComplete = true;
   }
 
   getMinutes(seconds) {

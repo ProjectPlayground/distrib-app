@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Distrib!</ion-title>
+    <ion-buttons start>
+      <button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+	<ion-card *ngIf="currentTask.activity === 'pickup'">
+	  <ion-item>
+	    <ion-icon name="car" item-left large></ion-icon>
+	    <h3>Drive to <b>{{currentTask.orders[0].store.name}}</b></h3>
+	    <p>{{currentTask.address?.address1}}, {{currentTask.address?.address2}}</p>
+	    <p>{{currentTask.address?.city}}, {{currentTask.address?.postal}}</p>
+	  </ion-item>
+	  <ion-item>
+	    {{getMinutes(currentTask.timeFromPrevious)}} min
+	    <p item-right>
+	    	Arrive by: {{currentTask.arrivalTime | date:"shortTime"}}<br>
+	    	Depart by: {{currentTask.departureTime | date:"shortTime"}}
+	    </p>
+	  </ion-item>
+    <ion-toolbar>
+		  <ion-row>
+		    <ion-col width-50>
+		    	<button secondary small block>Start</button>
+				</ion-col>
+		    <ion-col width-50 *ngIf="currentTask.status===active">
+		    	<button secondary small block>Complete</button>
+				</ion-col>
+		    <ion-col width-50>
+		    	<button small block>Navigation</button>
+				</ion-col>
+		  </ion-row>
+		</ion-toolbar>
+	</ion-card>
+	<ion-card *ngIf="currentTask.activity === 'pickup'">
+	  <ion-item class="capitalize">
+	    <ion-icon name="basket" item-left large></ion-icon>
+	    <h3>Pickup packages</h3>
+	    <p *ngFor="let order of currentTask.orders">
+	    	Order #<b>{{order.orderID}}</b> for {{order.customerName}}
+	    </p>
+	  </ion-item>
+    <ion-toolbar>
+		  <button secondary small block>Got eem!</button>
+		</ion-toolbar>
+	</ion-card>
+</ion-content>

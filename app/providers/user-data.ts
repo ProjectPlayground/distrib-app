@@ -9,7 +9,7 @@ export class UserData {
   CURRENTSHIFT: any;
   storage = new Storage(LocalStorage);
 
-  constructor (public events: Events) {}
+  constructor (public events: Events) { }
 
   login(username) {
     this.storage.set(this.HAS_LOGGED_IN, true);

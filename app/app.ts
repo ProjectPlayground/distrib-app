@@ -4,7 +4,7 @@ import { StatusBar, Splashscreen } from 'ionic-native';
 import { DeliveryData } from './providers/delivery-data';
 import { UserData } from './providers/user-data';
 import { TabsPage } from './pages/tabs/tabs';
-import { NavigationPage } from './pages/navigation/navigation';
+import { ShiftsPage } from './pages/shifts/shifts';
 
 // maps api key ios AIzaSyCfZs1op2mxz8ccYaxK-1rHM76xEKDulc4
 // map api key android  AIzaSyCAS2mmMbeDNeXLKC6EpMlNbujnwhxEm4g
@@ -24,19 +24,18 @@ interface PageObj {
   templateUrl: 'build/app.html',
   providers: [ UserData, DeliveryData ]
 })
-
 export class MyApp {
 
   @ViewChild(Nav) nav: Nav;
 
   appPages: PageObj[] = [
-    { title: 'Tasks', component: TabsPage, index: 0, icon: 'clipboard' },
-    { title: 'Navigation', component: TabsPage, index: 1, icon: 'navigate' },
-    { title: 'Shifts', component: TabsPage, index: 2, icon: 'calendar' }
+    { title: 'Distrib', component: TabsPage, index: 0, icon: 'clipboard' },
+    { title: 'Tasks', component: TabsPage, index: 1, icon: 'navigate' },
+    { title: 'Map', component: TabsPage, index: 2, icon: 'calendar' }
   ];
   loggedInPages: PageObj[] = [
     { title: 'Account', component: TabsPage, icon: 'person' },
-    { title: 'Logout', component: TabsPage, icon: 'log-out' }
+    { title: 'Shifts', component: ShiftsPage, icon: 'calendar' }
   ];
   loggedOutPages: PageObj[] = [
     { title: 'Login', component: TabsPage, icon: 'log-in' },
@@ -56,8 +55,6 @@ export class MyApp {
       Splashscreen.hide();
     });
 
-    this.enableMenu(true);
-
     // decide which menu items should be hidden by current login status stored in local storage
     this.userData.hasLoggedIn().then((hasLoggedIn) => {
       this.enableMenu(hasLoggedIn === 'true');
@@ -66,10 +63,13 @@ export class MyApp {
     this.listenToLoginEvents();
   }
 
+  login() {
+    this.enableMenu(true);
+  }
+
   openPage(page: PageObj) {
     if (page.index) {
       this.nav.setRoot(page.component, {tabIndex: page.index});
-
     } else {
       this.nav.setRoot(page.component);
     }

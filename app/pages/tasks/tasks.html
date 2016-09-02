@@ -3,7 +3,7 @@
     <ion-title>Tasks</ion-title>
     <ion-buttons start>
       <button menuToggle>
-      	<ion-icon name="menu"></ion-icon>
+        <ion-icon name="menu"></ion-icon>
       </button>
     </ion-buttons>
     <ion-buttons end>
@@ -18,6 +18,22 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-list>
+    <button ion-item class="capitalize">
+      <h3>
+        <b>Start location</b> <ion-icon name="home"></ion-icon>
+        <p style="float: right;">Shift start: <b>{{currentShift.startTime | date:"shortTime"}}</b></p>
+      </h3>
+      <h4>
+        <span *ngIf="currentShift.address?.address1">
+          {{currentShift.address.address1}}
+          {{currentShift.address.city}}, {{currentShift.address.postal}}
+        </span>
+      </h4>
+      <h6>
+       Lat: {{currentShift.location?.latitude}}<br>Lon: {{currentShift.location?.longitude}}
+        <p style="float: right;">Depart by: <b>{{currentShift.stats?.actualStart | date:"shortTime"}}</b></p>
+      </h6>
+    </button>
     <div *ngFor="let waypoint of currentShift.waypoints; let i=index">
       <ion-item-divider light class="capitalize">
         <ion-badge item-left>{{alphabet[i]}}</ion-badge>
