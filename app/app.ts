@@ -4,7 +4,11 @@ import { StatusBar, Splashscreen } from 'ionic-native';
 import { DeliveryData } from './providers/delivery-data';
 import { UserData } from './providers/user-data';
 import { TabsPage } from './pages/tabs/tabs';
+import { UserPage } from './pages/user/user';
 import { ShiftsPage } from './pages/shifts/shifts';
+import {Http} from '@angular/http';
+import {AuthHttp, AuthConfig} from 'angular2-jwt';
+import {AuthService} from './services/auth/auth';
 
 // maps api key ios AIzaSyCfZs1op2mxz8ccYaxK-1rHM76xEKDulc4
 // map api key android  AIzaSyCAS2mmMbeDNeXLKC6EpMlNbujnwhxEm4g
@@ -38,7 +42,7 @@ export class MyApp {
     { title: 'Shifts', component: ShiftsPage, icon: 'calendar' }
   ];
   loggedOutPages: PageObj[] = [
-    { title: 'Login', component: TabsPage, icon: 'log-in' },
+    { title: 'Login', component: UserPage, icon: 'log-in' }
   ];
   rootPage: any = TabsPage;
 
@@ -47,7 +51,8 @@ export class MyApp {
     public userData: UserData,
     public delivData: DeliveryData,
     public menu: MenuController,
-    platform: Platform
+    public platform: Platform,
+    public auth: AuthService
   ) {
     // Call any initial plugins when ready
     platform.ready().then(() => {
@@ -102,4 +107,10 @@ export class MyApp {
 
 }
 
-ionicBootstrap(MyApp, [DeliveryData, UserData], { });
+ionicBootstrap(MyApp, [DeliveryData, UserData, {provide:AuthHttp,
+    useFactory: (http) => {
+      return new AuthHttp(new AuthConfig({noJwtError: true}), http);
+    },
+    deps: [Http]
+  },
+  AuthService], { });
