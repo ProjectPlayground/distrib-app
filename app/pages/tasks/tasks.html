@@ -1,11 +1,18 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>Tasks</ion-title>
     <ion-buttons start>
       <button menuToggle>
         <ion-icon name="menu"></ion-icon>
       </button>
     </ion-buttons>
+    <ion-segment [(ngModel)]="segment" primary>
+      <ion-segment-button value="list">
+        List
+      </ion-segment-button>
+      <ion-segment-button value="map">
+        Map
+      </ion-segment-button>
+    </ion-segment>
     <ion-buttons end>
       <button (click)="filterChange()">
         Filters
@@ -13,11 +20,13 @@
     </ion-buttons>
   </ion-navbar>
 </ion-header>
+
 <ion-content>
-  <ion-refresher (ionRefresh)="refreshShift($event)">
+  <!-- *************** LIST ******************* -->
+  <ion-refresher *ngIf="segment==='list'" (ionRefresh)="refreshShift($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <ion-list>
+  <ion-list *ngIf="segment==='list'">
     <button ion-item class="capitalize">
       <h3>
         <b>Start location</b> <ion-icon name="home"></ion-icon>
@@ -62,55 +71,19 @@
             <p style="float: right;">Depart by: <b>{{waypoint.departureTime | date:"shortTime"}}</b></p>
           </h6>
         </button>
-            <ion-item-options side="right">
-      <button primary>
-        <ion-icon name="text"></ion-icon>
-        Maps
-      </button>
-      <button secondary>
-        <ion-icon name="call"></ion-icon>
-        Contact
-      </button>
-    </ion-item-options>
+        <ion-item-options side="right">
+          <button primary>
+            <ion-icon name="text"></ion-icon>
+            Maps
+          </button>
+          <button secondary>
+            <ion-icon name="call"></ion-icon>
+            Contact
+          </button>
+        </ion-item-options>
       </ion-item-sliding>
     </div>
   </ion-list>
+  <!-- *************** MAP ******************* -->
+  <div #map id="map" *ngIf="segment==='map'"></div>  
 </ion-content>
-
-<!--   <ion-item-group>
-    <div *ngFor="let waypoint of currentShift.waypoints; let i=index">
-      <ion-item-divider light>
-        Drive {{getMinutes(waypoint.timeFromPrevious)}} minutes
-        <ion-badge item-right>Directions to {{alphabet[i]}}</ion-badge>
-      </ion-item-divider>
-      <button ion-item class="task" detail-none>
-        <ion-badge light class="enum">{{alphabet[i]}}</ion-badge>
-        <h6 class="capitalize">
-          <b *ngIf="waypoint.activity === 'pickup'">
-            {{waypoint.orders[0].store.name}} <ion-icon name="cart"></ion-icon>
-          </b>
-          <b *ngIf="waypoint.activity === 'delivery'">
-            {{waypoint.orders[0].customerName}} <ion-icon name="person"></ion-icon>
-          </b>
-        </h6>
-        <h6 class="capitalize">
-          {{waypoint.address.address1}}
-        </h6>
-        <h6 class="capitalize" *ngIf="waypoint.address.address2">
-          {{waypoint.address.address2}}
-        </h6>
-        <h6 class="capitalize">
-          {{waypoint.address.city}}, {{waypoint.address.postal}}
-        </h6>
-        <p class="right-top">
-          Arrive by: <b>{{waypoint.arrivalTime | date:"shortTime"}}</b>
-        </p>
-        <p class="right-middle capitalize">
-          {{waypoint.activity}}: {{waypoint.orders.length}} Orders
-        </p>
-        <p class="right-bottom">
-          Leave by: <b>{{waypoint.departureTime | date:"shortTime"}}</b>
-        </p>
-      </button>
-    </div>
-  </ion-item-group> -->

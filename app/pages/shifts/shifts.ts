@@ -16,7 +16,7 @@ export class ShiftsPage {
   segment = 'current';
   filters = {
     start: new Date(new Date().setHours(0,0,0,0)),
-    end: new Date(new Date().setHours(47,59,0,0))
+    end: new Date(new Date().setHours(95,59,0,0))
   };
 
   constructor (

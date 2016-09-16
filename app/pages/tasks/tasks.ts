@@ -1,20 +1,28 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { AlertController, App, ItemSliding, List, NavController } from 'ionic-angular';
 import { UserData } from '../../providers/user-data';
 import { DeliveryData } from '../../providers/delivery-data';
 import { TaskPage } from '../../pages/task/task';
+
+declare var google;
 
 @Component({
   templateUrl: 'build/pages/tasks/tasks.html',
 })
 export class TasksPage {
 
+  @ViewChild('map') mapElement: ElementRef;
   currentShift: any = {};
+  currentTask: any = {};
+  map: any;
+
   alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+  segment = 'list'; // or map
+  labelIndex = 0;
 
   constructor (
-    public alertCtrl: AlertController,
     public app: App,
+    public alertCtrl: AlertController,
     public navCtrl: NavController,
     public delivData: DeliveryData,
     public user: UserData
@@ -22,10 +30,6 @@ export class TasksPage {
 
   ngOnInit() {
     this.getCurrentShift();
-  }
-
-  viewTask(task, i) {
-    this.navCtrl.push(TaskPage, task, i);
   }
 
   refreshShift(refresher) {
@@ -39,10 +43,36 @@ export class TasksPage {
     this.delivData.getShifts({start: new Date()})
     .subscribe(data => {
       this.currentShift = data[0];
-      console.log(this.currentShift);
     }, err => {
       this.handleError(err);
     });
+  }
+
+  loadMap() {
+    this.labelIndex = 0; // reset label index
+    let latLng = new google.maps.LatLng(this.currentShift.waypoints[0].location.latitude, this.currentShift.waypoints[0].location.longitude);
+    let mapOptions = {
+      center: { lat: 53.5438, lng: -113.4956},
+      zoom: 10,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    }
+    this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+    for (var i = 0; i < this.currentShift.waypoints.length; i++) {
+      let waypoint = this.currentShift.waypoints[i];
+      this.addMarker({ lat: waypoint.location.latitude, lng: waypoint.location.longitude })
+    }
+  }
+
+  addMarker(location) {
+    var marker = new google.maps.Marker({
+      position: location,
+      label: this.alphabet[this.labelIndex++],
+      map: this.map
+    });
+  }
+
+  viewTask(task, i) {
+    this.navCtrl.push(TaskPage, task, i);
   }
 
   getMinutes(seconds) {

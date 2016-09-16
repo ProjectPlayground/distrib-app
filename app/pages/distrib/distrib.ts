@@ -45,7 +45,7 @@ export class DistribPage {
   getCurrentTask() {
   	for (let i = 0; i < this.currentShift.waypoints.length; i++) {
   		let task = this.currentShift.waypoints[i];
-  		if ( task.status==="active") { 
+  		if ( task.status === "active") { 
   			this.currentTask = task; 
   			return;
   		} else if (task.status==="incomplete") {

@@ -35,7 +35,7 @@ export class MyApp {
   appPages: PageObj[] = [
     { title: 'Distrib', component: TabsPage, index: 0, icon: 'clipboard' },
     { title: 'Tasks', component: TabsPage, index: 1, icon: 'navigate' },
-    { title: 'Map', component: TabsPage, index: 2, icon: 'calendar' }
+    { title: 'Shifts', component: TabsPage, index: 2, icon: 'calendar' }
   ];
   loggedInPages: PageObj[] = [
     { title: 'Account', component: TabsPage, icon: 'person' },
