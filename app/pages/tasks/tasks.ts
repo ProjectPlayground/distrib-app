@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { AlertController, App, ItemSliding, List, NavController } from 'ionic-angular';
+import { AlertController, App, ItemSliding, List, NavController, LoadingController } from 'ionic-angular';
 import { UserData } from '../../providers/user-data';
 import { DeliveryData } from '../../providers/delivery-data';
 import { TaskPage } from '../../pages/task/task';
@@ -19,10 +19,12 @@ export class TasksPage {
   alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
   segment = 'list'; // or map
   labelIndex = 0;
+  mapLoaded = false;
 
   constructor (
     public app: App,
     public alertCtrl: AlertController,
+    public loadingCtrl: LoadingController,
     public navCtrl: NavController,
     public delivData: DeliveryData,
     public user: UserData
@@ -32,20 +34,23 @@ export class TasksPage {
     this.getCurrentShift();
   }
 
-  refreshShift(refresher) {
-    this.getCurrentShift();
-    setTimeout(() => {
-      refresher.complete();
-    }, 1000);
+  ngAfterViewChecked(){
+    if (this.segment === 'map' && this.mapLoaded === false) {
+      this.loadMap();
+      this.mapLoaded = true;
+    }
   }
 
-  getCurrentShift() {
+  getCurrentShift(refresher?) {
     this.delivData.getShifts({start: new Date()})
     .subscribe(data => {
       this.currentShift = data[0];
-      this.loadMap();
     }, err => {
-      this.handleError(err);
+      // this.handleError(err);
+    }, () => {
+      if (refresher) {
+        refresher.complete();
+      };
     });
   }
 

@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import { NavParams } from 'ionic-angular';
-import { DistribPage } from '../distrib/distrib';
+import { TaskPage } from '../task/task';
 import { TasksPage } from '../tasks/tasks';
 import { ShiftsPage } from '../shifts/shifts';
 
@@ -8,7 +8,7 @@ import { ShiftsPage } from '../shifts/shifts';
   templateUrl: 'build/pages/tabs/tabs.html'
 })
 export class TabsPage {
-  tab1Root: any = DistribPage;
+  tab1Root: any = TaskPage;
   tab2Root: any = TasksPage;
   tab3Root: any = ShiftsPage;
   selectedIndex: number;

@@ -7,11 +7,33 @@
 
   <ion-content class="outer-content">
 
-    <ion-list>
+<!--     <ion-list>
       <ion-list-header>
         Delivery
       </ion-list-header>
       <button ion-item menuClose *ngFor="let p of appPages" (click)="openPage(p)">
+        <ion-icon item-left [name]="p.icon"></ion-icon>
+        {{p.title}}
+      </button>
+    </ion-list> -->
+
+    <ion-card>
+
+  <ion-card-header>
+    Please sign in
+  </ion-card-header>
+
+  <ion-card-content>
+    <!-- Add card content here! -->
+  </ion-card-content>
+
+</ion-card>
+
+    <ion-list>
+      <ion-list-header>
+        Delivery
+      </ion-list-header>
+      <button ion-item menuClose *ngFor="let p of pages" (click)="openPage(p)">
         <ion-icon item-left [name]="p.icon"></ion-icon>
         {{p.title}}
       </button>
@@ -40,11 +62,22 @@
 
   <ion-content class="outer-content">
 
-    <ion-list>
+<!--     <ion-list>
       <ion-list-header>
-        Navigate
+        Delivery
       </ion-list-header>
       <button ion-item menuClose *ngFor="let p of appPages" (click)="openPage(p)">
+        <ion-icon item-left [name]="p.icon"></ion-icon>
+        {{p.title}}
+      </button>
+    </ion-list>
+ -->
+
+    <ion-list>
+      <ion-list-header>
+        Delivery
+      </ion-list-header>
+      <button ion-item menuClose *ngFor="let p of pages" (click)="openPage(p)">
         <ion-icon item-left [name]="p.icon"></ion-icon>
         {{p.title}}
       </button>

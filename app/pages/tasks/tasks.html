@@ -1,18 +1,20 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar no-border-bottom>
     <ion-buttons start>
       <button menuToggle>
         <ion-icon name="menu"></ion-icon>
       </button>
     </ion-buttons>
-    <ion-segment [(ngModel)]="segment" primary>
-      <ion-segment-button value="list">
-        List
-      </ion-segment-button>
-      <ion-segment-button value="map">
-        Map
-      </ion-segment-button>
-    </ion-segment>
+    <ion-toolbar>
+      <ion-segment [(ngModel)]="segment">
+        <ion-segment-button value="list" (ionSelect)="mapLoaded = false">
+          List
+        </ion-segment-button>
+        <ion-segment-button value="map">
+          Map
+        </ion-segment-button>
+      </ion-segment>
+    </ion-toolbar>
     <ion-buttons end>
       <button (click)="filterChange()">
         Filters
@@ -21,13 +23,16 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content>
+<ion-content [ngSwitch]="segment">
   <!-- *************** LIST ******************* -->
-  <ion-refresher *ngIf="segment==='list'" (ionRefresh)="refreshShift($event)">
+  <ion-refresher *ngSwitchCase="'list'" (ionRefresh)="getCurrentShift($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <ion-list *ngIf="segment==='list'">
-    <button ion-item class="capitalize">
+  <ion-list *ngSwitchCase="'list'">
+    <ion-list-header style="text-align: center" [hidden]="currentShift.waypoints">
+      No tasks... Pull down to refresh!
+    </ion-list-header>
+    <button ion-item class="capitalize" [hidden]="!currentShift.waypoints">
       <h3>
         <b>Start location</b> <ion-icon name="home"></ion-icon>
         <p style="float: right;">Shift start: <b>{{currentShift.startTime | date:"shortTime"}}</b></p>
@@ -85,5 +90,5 @@
     </div>
   </ion-list>
   <!-- *************** MAP ******************* -->
-  <div #map id="map" [hidden]="segment!=='map'"></div>  
+  <div #map id="map" *ngSwitchCase="'map'"></div>  
 </ion-content>

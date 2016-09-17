@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { AlertController, App, ItemSliding, List, ModalController, NavController, LoadingController } from 'ionic-angular';
 import { UserData } from '../../providers/user-data';
 import { DeliveryData } from '../../providers/delivery-data';
-import { ShiftPage } from '../../pages/shift/shift';
 import { createModal } from './createModal';
 import { filterModal } from './filterModal';
+import { TasksPage } from '../../pages/tasks/tasks';
 
 @Component({
   templateUrl: 'build/pages/shifts/shifts.html',
@@ -20,8 +20,9 @@ export class ShiftsPage {
   };
 
   constructor (
-    public alertCtrl: AlertController,
     public app: App,
+    public alertCtrl: AlertController,
+    public loadingCtrl: LoadingController,
     public load: LoadingController,
     public modalCtrl: ModalController,
     public navCtrl: NavController,
@@ -45,24 +46,21 @@ export class ShiftsPage {
   }
 
   viewShift(shift) {
-    this.user.setCurrentShift(this.shifts[0]);
-    this.navCtrl.push(ShiftPage, shift);
+    //this.user.setCurrentShift(this.shifts[0]);
+    this.navCtrl.push(TasksPage, shift);
   }
 
-  getShifts() {
+  getShifts(refresher?) {
   	this.delivData.getShifts(this.filters)
   	.subscribe(data => {
       this.shifts = data;
   	}, err => {
       this.handleError(err);
+    }, () => {
+      if (refresher) {
+        refresher.complete();
+      };
     });
-  }
-
-  refreshShifts(refresher) {
-    this.getShifts();
-    setTimeout(() => {
-      refresher.complete();
-    }, 1000);
   }
 
   addShift() {

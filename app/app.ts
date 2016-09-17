@@ -1,14 +1,15 @@
 import { Component, ViewChild } from '@angular/core';
 import { Events, ionicBootstrap, MenuController, Nav, Platform } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
+import { Http } from '@angular/http';
+import { AuthHttp, AuthConfig } from 'angular2-jwt';
+import { AuthService } from './services/auth/auth';
 import { DeliveryData } from './providers/delivery-data';
 import { UserData } from './providers/user-data';
 import { TabsPage } from './pages/tabs/tabs';
 import { UserPage } from './pages/user/user';
+import { TasksPage } from './pages/tasks/tasks';
 import { ShiftsPage } from './pages/shifts/shifts';
-import {Http} from '@angular/http';
-import {AuthHttp, AuthConfig} from 'angular2-jwt';
-import {AuthService} from './services/auth/auth';
 
 // maps api key ios AIzaSyCfZs1op2mxz8ccYaxK-1rHM76xEKDulc4
 // map api key android  AIzaSyCAS2mmMbeDNeXLKC6EpMlNbujnwhxEm4g
@@ -32,6 +33,10 @@ export class MyApp {
 
   @ViewChild(Nav) nav: Nav;
 
+  pages: PageObj[] = [
+    { title: 'Distrib', component: TasksPage, icon: 'car' },
+    { title: 'Shifts', component: ShiftsPage, icon: 'calendar' }
+  ];
   appPages: PageObj[] = [
     { title: 'Distrib', component: TabsPage, index: 0, icon: 'clipboard' },
     { title: 'Tasks', component: TabsPage, index: 1, icon: 'navigate' },
@@ -44,7 +49,7 @@ export class MyApp {
   loggedOutPages: PageObj[] = [
     { title: 'Login', component: UserPage, icon: 'log-in' }
   ];
-  rootPage: any = TabsPage;
+  rootPage: any = ShiftsPage;
 
   constructor (
     public events: Events,
