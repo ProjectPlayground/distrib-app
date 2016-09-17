@@ -85,5 +85,5 @@
     </div>
   </ion-list>
   <!-- *************** MAP ******************* -->
-  <div #map id="map" *ngIf="segment==='map'"></div>  
+  <div #map id="map" [hidden]="segment!=='map'"></div>  
 </ion-content>

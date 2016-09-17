@@ -43,6 +43,7 @@ export class TasksPage {
     this.delivData.getShifts({start: new Date()})
     .subscribe(data => {
       this.currentShift = data[0];
+      this.loadMap();
     }, err => {
       this.handleError(err);
     });
