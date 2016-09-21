@@ -1,6 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { AlertController, App, ItemSliding, List, NavController, LoadingController } from 'ionic-angular';
-import { UserData } from '../../providers/user-data';
 import { DeliveryData } from '../../providers/delivery-data';
 import { TaskPage } from '../../pages/task/task';
 
@@ -26,8 +25,7 @@ export class TasksPage {
     public alertCtrl: AlertController,
     public loadingCtrl: LoadingController,
     public navCtrl: NavController,
-    public delivData: DeliveryData,
-    public user: UserData
+    public delivData: DeliveryData
   ) { }
 
   ngOnInit() {

@@ -1,12 +1,6 @@
-  <ion-navbar *navbar>
+<ion-navbar *navbar>
   <ion-title>User</ion-title>
 </ion-navbar>
-
-<ion-content padding *ngIf="!auth.authenticated()">
-  
-  <button block (click)="auth.login()">Login</button>
-  
-</ion-content>
 
 <ion-content padding *ngIf="auth.authenticated()">  
   
@@ -21,7 +15,5 @@
     </ion-item>
   
   </ion-card>
-  
-  <button block (click)="auth.logout()">Logout</button>
-  
+    
 </ion-content>

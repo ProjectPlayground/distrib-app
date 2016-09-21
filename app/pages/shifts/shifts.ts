@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { AlertController, App, ItemSliding, List, ModalController, NavController, LoadingController } from 'ionic-angular';
-import { UserData } from '../../providers/user-data';
 import { DeliveryData } from '../../providers/delivery-data';
 import { createModal } from './createModal';
 import { filterModal } from './filterModal';
@@ -26,8 +25,7 @@ export class ShiftsPage {
     public load: LoadingController,
     public modalCtrl: ModalController,
     public navCtrl: NavController,
-    public delivData: DeliveryData,
-    public user: UserData
+    public delivData: DeliveryData
   ) { }
 
 	ngOnInit() {

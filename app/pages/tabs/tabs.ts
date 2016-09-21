@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import { Component } from '@angular/core';
 import { NavParams } from 'ionic-angular';
 import { TaskPage } from '../task/task';
 import { TasksPage } from '../tasks/tasks';

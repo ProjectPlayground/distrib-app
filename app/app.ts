@@ -3,22 +3,22 @@ import { Events, ionicBootstrap, MenuController, Nav, Platform } from 'ionic-ang
 import { StatusBar, Splashscreen } from 'ionic-native';
 import { Http } from '@angular/http';
 import { AuthHttp, AuthConfig } from 'angular2-jwt';
-import { AuthService } from './services/auth/auth';
+import { AuthService } from './services/auth';
 import { DeliveryData } from './providers/delivery-data';
-import { UserData } from './providers/user-data';
 import { TabsPage } from './pages/tabs/tabs';
 import { UserPage } from './pages/user/user';
 import { TasksPage } from './pages/tasks/tasks';
 import { ShiftsPage } from './pages/shifts/shifts';
+import { AuthPage } from './pages/auth/auth';
 
 // maps api key ios AIzaSyCfZs1op2mxz8ccYaxK-1rHM76xEKDulc4
 // map api key android  AIzaSyCAS2mmMbeDNeXLKC6EpMlNbujnwhxEm4g
 // cordova plugin add cordova-plugin-googlemaps --variable API_KEY_FOR_ANDROID="AIzaSyCAS2mmMbeDNeXLKC6EpMlNbujnwhxEm4g" --variable API_KEY_FOR_IOS="AIzaSyCfZs1op2mxz8ccYaxK-1rHM76xEKDulc4"
 
 interface PageObj {
-  title: string;
+  title?: string;
   component: any;
-  icon: string;
+  icon?: string;
   index?: number;
 }
 
@@ -27,33 +27,30 @@ interface PageObj {
 // })
 @Component({
   templateUrl: 'build/app.html',
-  providers: [ UserData, DeliveryData ]
+  providers: [ DeliveryData ]
 })
 export class MyApp {
 
   @ViewChild(Nav) nav: Nav;
 
   pages: PageObj[] = [
-    { title: 'Distrib', component: TasksPage, icon: 'car' },
-    { title: 'Shifts', component: ShiftsPage, icon: 'calendar' }
+    { title: 'Tasks', component: TasksPage, icon: 'clipboard' },
   ];
   appPages: PageObj[] = [
-    { title: 'Distrib', component: TabsPage, index: 0, icon: 'clipboard' },
-    { title: 'Tasks', component: TabsPage, index: 1, icon: 'navigate' },
+    { title: 'Task', component: TabsPage, index: 0, icon: 'navigate' },
+    { title: 'Tasks', component: TabsPage, index: 1, icon: 'clipboard' },
     { title: 'Shifts', component: TabsPage, index: 2, icon: 'calendar' }
   ];
   loggedInPages: PageObj[] = [
-    { title: 'Account', component: TabsPage, icon: 'person' },
-    { title: 'Shifts', component: ShiftsPage, icon: 'calendar' }
+    { title: 'Account', component: UserPage, icon: 'person' },
+    { title: 'Shifts', component: ShiftsPage, icon: 'calendar' },
   ];
   loggedOutPages: PageObj[] = [
-    { title: 'Login', component: UserPage, icon: 'log-in' }
   ];
-  rootPage: any = ShiftsPage;
+  rootPage: any = AuthPage;
 
   constructor (
     public events: Events,
-    public userData: UserData,
     public delivData: DeliveryData,
     public menu: MenuController,
     public platform: Platform,
@@ -64,17 +61,15 @@ export class MyApp {
       StatusBar.styleDefault();
       Splashscreen.hide();
     });
-
     // decide which menu items should be hidden by current login status stored in local storage
-    this.userData.hasLoggedIn().then((hasLoggedIn) => {
-      this.enableMenu(hasLoggedIn === 'true');
-    });
-
+    setTimeout(() => { 
+      if (this.auth.authenticated()) {
+        this.enableMenu(true);
+      } else {
+        this.enableMenu(false);
+      }
+    }, 1);
     this.listenToLoginEvents();
-  }
-
-  login() {
-    this.enableMenu(true);
   }
 
   openPage(page: PageObj) {
@@ -83,16 +78,11 @@ export class MyApp {
     } else {
       this.nav.setRoot(page.component);
     }
-    if (page.title === 'Logout') {
-      // Give the menu time to close before changing to logged out
-      setTimeout(() => {
-        this.userData.logout();
-      }, 1000);
-    }
   }
 
   listenToLoginEvents() {
     this.events.subscribe('user:login', () => {
+      this.nav.setRoot(ShiftsPage);
       this.enableMenu(true);
     });
 
@@ -101,6 +91,7 @@ export class MyApp {
     });
 
     this.events.subscribe('user:logout', () => {
+      this.nav.setRoot(AuthPage);
       this.enableMenu(false);
     });
   }
@@ -112,7 +103,7 @@ export class MyApp {
 
 }
 
-ionicBootstrap(MyApp, [DeliveryData, UserData, {provide:AuthHttp,
+ionicBootstrap(MyApp, [DeliveryData, {provide:AuthHttp,
     useFactory: (http) => {
       return new AuthHttp(new AuthConfig({noJwtError: true}), http);
     },
