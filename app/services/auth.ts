@@ -11,6 +11,7 @@ export class AuthService {
   jwtHelper: JwtHelper = new JwtHelper();
   auth0 = new Auth0({clientID: 'mtQanzM5F1P2NXQLFptakp6MsDRYAhpP', domain: 'distrib.auth0.com'});
   lock = new Auth0Lock('mtQanzM5F1P2NXQLFptakp6MsDRYAhpP', 'distrib.auth0.com', {
+    closable: false,
     auth: {
       redirect: false,
       params: {
@@ -54,11 +55,11 @@ export class AuthService {
             profile = Object.assign(profile, data)
             this.local.set('profile', JSON.stringify(profile));
             this.user = profile;
-            console.log(this.user);
           },
           error => alert(error)
          );
       });
+      this.events.publish('user:login');
       this.lock.hide();
       this.local.set('refresh_token', authResult.refreshToken);
       this.zoneImpl.run(() => this.user = authResult.profile);

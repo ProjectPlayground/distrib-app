@@ -1,20 +1,16 @@
 <ion-header>
   <ion-navbar no-border-bottom>
-    <ion-buttons start>
-      <button menuToggle>
-        <ion-icon name="menu"></ion-icon>
-      </button>
-    </ion-buttons>
-    <ion-toolbar>
-      <ion-segment [(ngModel)]="segment">
-        <ion-segment-button value="list" (ionSelect)="mapLoaded = false">
-          List
-        </ion-segment-button>
-        <ion-segment-button value="map">
-          Map
-        </ion-segment-button>
-      </ion-segment>
-    </ion-toolbar>
+    <button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-segment [(ngModel)]="segment">
+      <ion-segment-button value="list" (ionSelect)="mapLoaded = false">
+        List
+      </ion-segment-button>
+      <ion-segment-button value="map">
+        Map
+      </ion-segment-button>
+    </ion-segment>
     <ion-buttons end>
       <button (click)="filterChange()">
         <ion-icon name="options"></ion-icon>

@@ -6,6 +6,7 @@ import { AuthHttp, AuthConfig } from 'angular2-jwt';
 import { AuthService } from './services/auth';
 import { DeliveryData } from './providers/delivery-data';
 import { TabsPage } from './pages/tabs/tabs';
+import { HomePage } from './pages/home/home';
 import { UserPage } from './pages/user/user';
 import { TasksPage } from './pages/tasks/tasks';
 import { ShiftsPage } from './pages/shifts/shifts';
@@ -20,6 +21,7 @@ interface PageObj {
   component: any;
   icon?: string;
   index?: number;
+  badge?: any;
 }
 
 // @Component({
@@ -33,21 +35,7 @@ export class MyApp {
 
   @ViewChild(Nav) nav: Nav;
 
-  pages: PageObj[] = [
-    { title: 'Tasks', component: TasksPage, icon: 'clipboard' },
-  ];
-  appPages: PageObj[] = [
-    { title: 'Task', component: TabsPage, index: 0, icon: 'navigate' },
-    { title: 'Tasks', component: TabsPage, index: 1, icon: 'clipboard' },
-    { title: 'Shifts', component: TabsPage, index: 2, icon: 'calendar' }
-  ];
-  loggedInPages: PageObj[] = [
-    { title: 'Account', component: UserPage, icon: 'person' },
-    { title: 'Shifts', component: ShiftsPage, icon: 'calendar' },
-  ];
-  loggedOutPages: PageObj[] = [
-  ];
-  rootPage: any = AuthPage;
+  rootPage: any = HomePage;
 
   constructor (
     public events: Events,
@@ -61,44 +49,32 @@ export class MyApp {
       StatusBar.styleDefault();
       Splashscreen.hide();
     });
-    // decide which menu items should be hidden by current login status stored in local storage
-    setTimeout(() => { 
-      if (this.auth.authenticated()) {
-        this.enableMenu(true);
-      } else {
-        this.enableMenu(false);
+    // Check to see if user authenticated, if not then display auth0
+    setTimeout(() => {
+      if (!this.auth.authenticated()) {
+        this.auth.login();
       }
-    }, 1);
+    }, 0);
     this.listenToLoginEvents();
+    this.hello = 'bye';
   }
 
-  openPage(page: PageObj) {
+  openPage(page) {
     if (page.index) {
       this.nav.setRoot(page.component, {tabIndex: page.index});
     } else {
-      this.nav.setRoot(page.component);
+      this.nav.setRoot(page);
     }
   }
 
   listenToLoginEvents() {
     this.events.subscribe('user:login', () => {
-      this.nav.setRoot(ShiftsPage);
-      this.enableMenu(true);
     });
-
     this.events.subscribe('user:signup', () => {
-      this.enableMenu(true);
     });
-
     this.events.subscribe('user:logout', () => {
-      this.nav.setRoot(AuthPage);
-      this.enableMenu(false);
+      this.auth.login();
     });
-  }
-
-  enableMenu(loggedIn) {
-    this.menu.enable(loggedIn, 'loggedInMenu');
-    this.menu.enable(!loggedIn, 'loggedOutMenu');
   }
 
 }

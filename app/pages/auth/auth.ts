@@ -11,10 +11,4 @@ export class AuthPage {
   constructor(private navCtrl: NavController, private auth: AuthService, private events: Events) { 
   }
 
- 	ngOnDestroy(){
- 		console.log('hello');
-          this.events.publish('user:login');
-
-  }
-
 }
