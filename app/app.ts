@@ -10,6 +10,7 @@ import { HomePage } from './pages/home/home';
 import { TasksPage } from './pages/tasks/tasks';
 import { ShiftsPage } from './pages/shifts/shifts';
 import { UserPage } from './pages/user/user';
+import { AuthPage } from './pages/auth/auth';
 
 // maps api key ios AIzaSyCfZs1op2mxz8ccYaxK-1rHM76xEKDulc4
 // map api key android  AIzaSyCAS2mmMbeDNeXLKC6EpMlNbujnwhxEm4g
@@ -56,7 +57,7 @@ export class MyApp {
     // Check to see if user authenticated, if not then display auth0
     setTimeout(() => {
       if (!this.auth.authenticated()) {
-        this.auth.login();
+        this.nav.setRoot(AuthPage);
       }
     }, 0);
     this.listenToLoginEvents();
@@ -72,11 +73,12 @@ export class MyApp {
 
   listenToLoginEvents() {
     this.events.subscribe('user:login', () => {
+      this.nav.setRoot(TabsPage);
     });
     this.events.subscribe('user:signup', () => {
     });
     this.events.subscribe('user:logout', () => {
-      this.auth.login();
+      this.nav.setRoot(AuthPage);
     });
   }
 
