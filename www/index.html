@@ -12,7 +12,6 @@
   <link wp-href="build/css/app.wp.css" rel="stylesheet">
 </head>
 <body>
-
   <!-- This is Ionic's root component, where the app will load -->
   <ion-app></ion-app>
 
@@ -33,7 +32,9 @@
   <script src="https://cdn.auth0.com/w2/auth0-7.2.0.min.js"></script>
   <!-- Auth0 Lock script -->
   <script src="http://cdn.auth0.com/js/lock/10.3.0/lock.min.js"></script>
-  <!-- Setting the right viewport -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+  <!-- CORS TO FIX WHITE SCREEN ISSUE -->
+  <meta http-equiv="Content-Security-Policy" content="default-src gap://ready file://* *; script-src 'self' 'unsafe-inline' 'unsafe-eval' *; style-src 'self' 'unsafe-inline' *">
+
 </body>
 </html>

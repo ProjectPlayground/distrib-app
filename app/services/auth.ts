@@ -11,18 +11,23 @@ export class AuthService {
   jwtHelper: JwtHelper = new JwtHelper();
   auth0 = new Auth0({clientID: 'mtQanzM5F1P2NXQLFptakp6MsDRYAhpP', domain: 'distrib.auth0.com'});
   lock = new Auth0Lock('mtQanzM5F1P2NXQLFptakp6MsDRYAhpP', 'distrib.auth0.com', {
-    container:'authContainer',
+    container:'authContainer', // important, modal does not work properly
+    rememberLastLogin: false, // important, hangs on last login
+    autoclose: true, // important, will not close keyboard without
     auth: {
-      redirect: false,
+      redirect: false, // important, will hang on login in iOS without
       params: {
-        scope: 'openid email',
-      }
+        scope: 'openid email', // important to communicate with server
+      },
+      sso: true
     },
     theme: {
-      labeledSubmitButton: false
+      logo: "https://dl.dropboxusercontent.com/s/wd0og2bqy7z7uuk/Picture1.png?dl=0",
+      primaryColor: "green"
     },
+    socialButtonStyle: 'small',
     languageDictionary: {
-      title: "Distrib Inc."
+      title: "Welcome to the future!"
     }
   });
   local: Storage = new Storage(LocalStorage);
@@ -59,8 +64,8 @@ export class AuthService {
           error => alert(error)
          );
       });
+      // important to remove lock.hide() or keyboard doesnt hide
       this.events.publish('user:login');
-      this.lock.hide();
       this.local.set('refresh_token', authResult.refreshToken);
       this.zoneImpl.run(() => this.user = authResult.profile);
     });
@@ -72,7 +77,8 @@ export class AuthService {
   }
   
   public login() {
-    // Show the Auth0 Lock widget
+    // Hide then show the Auth0 Lock widget
+    this.lock.hide();
     this.lock.show();    
   }
   
