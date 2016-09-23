@@ -13,7 +13,6 @@ export class AuthService {
   lock = new Auth0Lock('mtQanzM5F1P2NXQLFptakp6MsDRYAhpP', 'distrib.auth0.com', {
     closable: false,
     auth: {
-      redirect: false,
       params: {
         scope: 'openid email',
       }
