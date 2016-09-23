@@ -7,10 +7,9 @@ import { AuthService } from './services/auth';
 import { DeliveryData } from './providers/delivery-data';
 import { TabsPage } from './pages/tabs/tabs';
 import { HomePage } from './pages/home/home';
-import { UserPage } from './pages/user/user';
 import { TasksPage } from './pages/tasks/tasks';
 import { ShiftsPage } from './pages/shifts/shifts';
-import { AuthPage } from './pages/auth/auth';
+import { UserPage } from './pages/user/user';
 
 // maps api key ios AIzaSyCfZs1op2mxz8ccYaxK-1rHM76xEKDulc4
 // map api key android  AIzaSyCAS2mmMbeDNeXLKC6EpMlNbujnwhxEm4g
@@ -21,7 +20,6 @@ interface PageObj {
   component: any;
   icon?: string;
   index?: number;
-  badge?: any;
 }
 
 // @Component({
@@ -35,7 +33,13 @@ export class MyApp {
 
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = HomePage;
+  appPages: PageObj[] = [
+    { title: 'Home', component: TabsPage, index: 0, icon: 'home' },
+    { title: 'Tasks', component: TabsPage, index: 1, icon: 'clipboard' },
+    { title: 'Shifts', component: TabsPage, index: 2, icon: 'calendar' },
+    { title: 'User', component: TabsPage, index: 3, icon: 'person' }
+  ];
+  rootPage: any = TabsPage;
 
   constructor (
     public events: Events,
@@ -56,14 +60,13 @@ export class MyApp {
       }
     }, 0);
     this.listenToLoginEvents();
-    this.hello = 'bye';
   }
 
-  openPage(page) {
+   openPage(page: PageObj) {
     if (page.index) {
       this.nav.setRoot(page.component, {tabIndex: page.index});
     } else {
-      this.nav.setRoot(page);
+      this.nav.setRoot(page.component);
     }
   }
 

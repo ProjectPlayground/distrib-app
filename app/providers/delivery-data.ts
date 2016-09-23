@@ -8,13 +8,12 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class DeliveryData {
 
-  apiUrl = 'https://server-distrib.rhcloud.com/api/';   //f not h
+  apiUrl = 'https://server-distrib.rhcloud.com/api/';
 
   constructor (public http: Http, public authHttp: AuthHttp, public auth: AuthService) {}
 
   getShifts(filters?) {
-    // let query = this.apiUrl+'shifts?driver='+this.user.getUserID();
-    let query = this.apiUrl+'shifts?driver='+1245;
+    let query = this.apiUrl+'shifts?driver='+this.auth.user._id;
     if (filters) {
       if (filters.start) {
         query = query+'&start=' + filters.start;

@@ -3,7 +3,7 @@
 
   <ion-header>
     <ion-toolbar no-border>
-      <ion-item no-lines>
+      <ion-item no-lines *ngIf="auth.user">
         <ion-avatar item-left>
           <img src="{{ auth.user.picture }}">
         </ion-avatar>
@@ -15,18 +15,20 @@
 
   <ion-content class="outer-content">
 
-<!--         { title: 'Home', component: HomePage, icon: 'home' },
-    { title: 'Tasks', component: TasksPage, icon: 'clipboard' },
-    { title: 'Shifts', component: ShiftsPage, icon: 'calendar', badge: this.hello },
-    { title: 'Account', component: UserPage, icon: 'person' }, -->
-      <button secondary ion-item menuClose (click)="openPage(HomePage)">
-        <ion-icon item-left [name]="home"></ion-icon>
-        <ion-badge item-right></ion-badge>
-      bye</button>
-      <button secondary ion-item menuClose (click)="auth.logout()">
-        <ion-icon item-left [name]="'log-out'"></ion-icon>
-        Logout
+    <ion-list>
+      <ion-list-header>
+        Delivery
+      </ion-list-header>
+      <button ion-item menuClose *ngFor="let p of appPages" (click)="openPage(p)">
+        <ion-icon item-left [name]="p.icon"></ion-icon>
+        {{p.title}}
       </button>
+    </ion-list>
+    <button ion-item menuClose no-lines (click)="auth.logout()">
+      <ion-icon item-left [name]="'log-out'"></ion-icon>
+      Logout
+    </button>
+
   </ion-content>
 
 </ion-menu>

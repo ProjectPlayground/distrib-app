@@ -34,7 +34,7 @@
         <p style="float: right;">Shift start: <b>{{currentShift.startTime | date:"shortTime"}}</b></p>
       </h3>
       <h4>
-        <span *ngIf="currentShift.address?.address1">
+        <span *ngIf="currentShift?.address?.address1">
           {{currentShift.address.address1}}
           {{currentShift.address.city}}, {{currentShift.address.postal}}
         </span>
@@ -44,7 +44,7 @@
         <p style="float: right;">Depart by: <b>{{currentShift.stats?.actualStart | date:"shortTime"}}</b></p>
       </h6>
     </button>
-    <div *ngFor="let waypoint of currentShift.waypoints; let i=index">
+    <div *ngFor="let waypoint of currentShift?.waypoints; let i=index">
       <ion-item-divider light class="capitalize">
         <ion-badge item-left>{{alphabet[i]}}</ion-badge>
           <b style="float: right;">

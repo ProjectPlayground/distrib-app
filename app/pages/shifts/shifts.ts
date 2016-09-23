@@ -3,7 +3,6 @@ import { AlertController, App, ItemSliding, List, ModalController, NavController
 import { DeliveryData } from '../../providers/delivery-data';
 import { createModal } from './createModal';
 import { filterModal } from './filterModal';
-import { TasksPage } from '../../pages/tasks/tasks';
 
 @Component({
   templateUrl: 'build/pages/shifts/shifts.html',
@@ -45,7 +44,7 @@ export class ShiftsPage {
 
   viewShift(shift) {
     //this.user.setCurrentShift(this.shifts[0]);
-    this.navCtrl.push(TasksPage, shift);
+    this.navCtrl.push(ShiftsPage, shift);
   }
 
   getShifts(refresher?) {

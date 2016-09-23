@@ -27,7 +27,7 @@ export class AuthService {
   });
   local: Storage = new Storage(LocalStorage);
   refreshSubscription: any;
-  user: Object;
+  user: any;
   zoneImpl: NgZone;
   
   constructor(private authHttp: AuthHttp, zone: NgZone, public events: Events) {
