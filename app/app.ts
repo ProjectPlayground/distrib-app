@@ -23,9 +23,6 @@ interface PageObj {
   index?: number;
 }
 
-// @Component({
-//   template: '<ion-nav [root]="rootPage"></ion-nav>'
-// })
 @Component({
   templateUrl: 'build/app.html',
   providers: [ DeliveryData ]
