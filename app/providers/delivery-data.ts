@@ -1,3 +1,4 @@
+import { Events, LocalStorage, Storage } from 'ionic-angular';
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
@@ -9,6 +10,7 @@ import 'rxjs/add/operator/map';
 export class DeliveryData {
 
   apiUrl = 'https://server-distrib.rhcloud.com/api/';
+  storage = new Storage(LocalStorage);
 
   constructor (public http: Http, public authHttp: AuthHttp, public auth: AuthService) {}
 
@@ -20,6 +22,9 @@ export class DeliveryData {
       }
       if (filters.end) {
         query = query+'&end=' + filters.end;
+      }
+      if (filters.id) {
+        query = this.apiUrl+'shifts/'+filters.id;
       }
     }
     return this.authHttp.get(query)
@@ -33,6 +38,16 @@ export class DeliveryData {
 
   deleteShift(shift) {
     return this.authHttp.delete(this.apiUrl+'shifts/'+shift._id)
+  }
+
+  setCurrentShift(shift) {
+    this.storage.set('currentShift', shift._id); // save id of current shift (cant save objects)
+  }
+
+  getCurrentShift() {
+    return this.storage.get('currentShift').then(value => {
+      return value;
+    });
   }
 
 }

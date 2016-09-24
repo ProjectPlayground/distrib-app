@@ -56,7 +56,7 @@ export class ShiftsPage {
     }, () => {
       if (refresher) {
         refresher.complete();
-      };
+      }
     });
   }
 
@@ -81,6 +81,20 @@ export class ShiftsPage {
           }, err => {
             this.handleError(err);
           });
+        }
+      }]
+    });
+    alert.present();
+  }
+
+  selectShift(shift) {
+    let alert = this.alertCtrl.create({
+      title: 'Set active shift?',
+      buttons: ['Cancel',
+      {
+        text: 'Confirm',
+        handler: () => {
+          this.delivData.setCurrentShift(shift)
         }
       }]
     });

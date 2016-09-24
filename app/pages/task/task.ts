@@ -9,8 +9,9 @@ export class TaskPage {
 
   currentShift: any = {};
   currentTask: any = {};
-  shiftComplete = false;
+  
   alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+  shiftComplete = false;
 
   constructor (
     public alertCtrl: AlertController,
@@ -20,25 +21,22 @@ export class TaskPage {
   ) { }
 
 	ngOnInit() {
-    this.getCurrentShift();
+    // this.getCurrentShift();
   }
 
-  refresh(refresher) {
-    this.getCurrentShift();
-    setTimeout(() => {
-      refresher.complete();
-    }, 1000);
-  }
-
-  getCurrentShift() {
-    this.delivData.getShifts({start: new Date()})
-    .subscribe(data => {
-      this.currentShift = data[0];    
-      this.getCurrentTask();
-    }, err => {
-      this.handleError(err);
-    });
-  }
+  // getCurrentShift(refresher?) {
+  //   this.delivData.getCurrentShift()
+  //   .subscribe(data => {
+  //     this.currentShift = data;
+  //     this.getCurrentTask();
+  //   }, err => {
+  //     this.handleError(err);
+  //   }, () => {
+  //     if (refresher) {
+  //       refresher.complete();
+  //     };
+  //   });
+  // }
 
   getCurrentTask() {
   	for (let i = 0; i < this.currentShift.waypoints.length; i++) {

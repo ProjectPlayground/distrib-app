@@ -40,27 +40,40 @@ export class TasksPage {
   }
 
   getCurrentShift(refresher?) {
-    this.delivData.getShifts({start: new Date()})
-    .subscribe(data => {
-      this.currentShift = data[0];
-    }, err => {
-      // this.handleError(err);
-    }, () => {
-      if (refresher) {
-        refresher.complete();
-      };
+    this.delivData.getCurrentShift().then(shift => {
+      let filters = {id: shift};
+      this.delivData.getShifts(filters)
+        .subscribe(data => {
+          this.currentShift = data;
+        }, err => {
+          this.handleError(err);
+        }, () => {
+          if (refresher) {
+            refresher.complete();
+          };
+        });
     });
+  }
+
+  viewTask(task, i) {
+    this.navCtrl.push(TaskPage, task, i);
   }
 
   loadMap() {
     this.labelIndex = 0; // reset label index
-    let latLng = new google.maps.LatLng(this.currentShift.waypoints[0].location.latitude, this.currentShift.waypoints[0].location.longitude);
+    //  let latLng = new google.maps.LatLng(this.currentShift.waypoints[0].location.latitude, this.currentShift.waypoints[0].location.longitude);
     let mapOptions = {
       center: { lat: 53.5438, lng: -113.4956},
       zoom: 10,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     }
     this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+    if (this.currentShift) {
+      this.addWaypoints();
+    }
+  }
+
+  addWaypoints() {
     for (var i = 0; i < this.currentShift.waypoints.length; i++) {
       let waypoint = this.currentShift.waypoints[i];
       this.addMarker({ lat: waypoint.location.latitude, lng: waypoint.location.longitude })
@@ -73,10 +86,6 @@ export class TasksPage {
       label: this.alphabet[this.labelIndex++],
       map: this.map
     });
-  }
-
-  viewTask(task, i) {
-    this.navCtrl.push(TaskPage, task, i);
   }
 
   getMinutes(seconds) {

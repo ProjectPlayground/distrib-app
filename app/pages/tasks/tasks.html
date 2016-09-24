@@ -1,8 +1,5 @@
 <ion-header>
   <ion-navbar no-border-bottom>
-    <button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
     <ion-segment [(ngModel)]="segment">
       <ion-segment-button value="list" (ionSelect)="mapLoaded = false">
         List
@@ -21,20 +18,20 @@
 
 <ion-content [ngSwitch]="segment">
   <!-- *************** LIST ******************* -->
-  <ion-refresher *ngSwitchCase="'list'" (ionRefresh)="getCurrentShift($event)">
+  <ion-refresher *ngIf="segment === 'list'" (ionRefresh)="getCurrentShift($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <ion-list *ngSwitchCase="'list'">
-    <ion-list-header style="text-align: center" [hidden]="currentShift.waypoints">
+  <ion-list *ngIf="segment === 'list' && currentShift.waypoints">
+    <ion-list-header style="text-align: center" [hidden]="currentShift.waypoints.length > 0">
       No tasks... Pull down to refresh!
     </ion-list-header>
-    <button ion-item class="capitalize" [hidden]="!currentShift.waypoints">
+    <button ion-item detail-none class="capitalize">
       <h3>
         <b>Start location</b> <ion-icon name="home"></ion-icon>
         <p style="float: right;">Shift start: <b>{{currentShift.startTime | date:"shortTime"}}</b></p>
       </h3>
       <h4>
-        <span *ngIf="currentShift?.address?.address1">
+        <span *ngIf="currentShift.address.address1">
           {{currentShift.address.address1}}
           {{currentShift.address.city}}, {{currentShift.address.postal}}
         </span>
@@ -44,7 +41,7 @@
         <p style="float: right;">Depart by: <b>{{currentShift.stats?.actualStart | date:"shortTime"}}</b></p>
       </h6>
     </button>
-    <div *ngFor="let waypoint of currentShift?.waypoints; let i=index">
+    <div *ngFor="let waypoint of currentShift.waypoints; let i=index">
       <ion-item-divider light class="capitalize">
         <ion-badge item-left>{{alphabet[i]}}</ion-badge>
           <b style="float: right;">
@@ -53,7 +50,7 @@
           </b>
       </ion-item-divider>
       <ion-item-sliding>
-        <button ion-item class="capitalize" (click)="viewTask(waypoint)">
+        <button ion-item detail-none class="capitalize" (click)="viewTask(waypoint)">
           <h3><b>
             <span *ngIf="waypoint.activity === 'pickup'">
               {{waypoint.orders[0].store.name}} <ion-icon name="cart"></ion-icon>
@@ -86,5 +83,5 @@
     </div>
   </ion-list>
   <!-- *************** MAP ******************* -->
-  <div #map id="map" *ngSwitchCase="'map'"></div>  
+  <div #map id="map" *ngIf="segment === 'map'"></div>  
 </ion-content>
