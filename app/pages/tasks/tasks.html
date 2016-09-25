@@ -10,7 +10,7 @@
     </ion-segment>
     <ion-buttons end>
       <button (click)="filterChange()">
-        <ion-icon name="options"></ion-icon>
+        <ion-icon name="list"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
@@ -44,13 +44,15 @@
     <div *ngFor="let waypoint of currentShift.waypoints; let i=index">
       <ion-item-divider light class="capitalize">
         <ion-badge item-left>{{alphabet[i]}}</ion-badge>
-          <b style="float: right;">
+          <span style="float: right;">
             <ion-icon name="car"></ion-icon> {{getMinutes(waypoint.timeFromPrevious)}} min -
-            {{waypoint.status}}
-          </b>
+              <span *ngIf="waypoint.status === 'incomplete'" style="color: red">Incomplete</span>
+              <span *ngIf="waypoint.status === 'active'" style="color: blue">Active</span>
+              <span *ngIf="waypoint.status === 'complete'" style="color: green">Complete</span>
+          </span>
       </ion-item-divider>
       <ion-item-sliding>
-        <button ion-item detail-none class="capitalize" (click)="viewTask(waypoint)">
+        <button ion-item detail-none class="capitalize" (click)="viewTask(waypoint, i)">
           <h3><b>
             <span *ngIf="waypoint.activity === 'pickup'">
               {{waypoint.orders[0].store.name}} <ion-icon name="cart"></ion-icon>

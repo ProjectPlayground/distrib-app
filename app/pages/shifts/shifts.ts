@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { AlertController, App, ItemSliding, List, ModalController, NavController, LoadingController } from 'ionic-angular';
+import { AlertController, App, ItemSliding, List, NavController, ModalController } from 'ionic-angular';
 import { DeliveryData } from '../../providers/delivery-data';
+import { ShiftPage } from '../shift/shift';
 import { createModal } from './createModal';
 import { filterModal } from './filterModal';
 
@@ -10,7 +11,7 @@ import { filterModal } from './filterModal';
 export class ShiftsPage {
 
   shifts: any = [];
-  currentShift: any = {};
+  currentShift;
   segment = 'current';
   filters = {
     start: new Date(new Date().setHours(0,0,0,0)),
@@ -20,15 +21,14 @@ export class ShiftsPage {
   constructor (
     public app: App,
     public alertCtrl: AlertController,
-    public loadingCtrl: LoadingController,
-    public load: LoadingController,
     public modalCtrl: ModalController,
     public navCtrl: NavController,
     public delivData: DeliveryData
   ) { }
 
-	ngOnInit() {
+	ionViewWillEnter() {
     this.getShifts();
+    this.getCurrentShift();
 	}
 
   filterChange() {
@@ -42,9 +42,14 @@ export class ShiftsPage {
     });
   }
 
+  getCurrentShift() {
+    this.delivData.getCurrentShift().then(shift => {
+      this.currentShift = shift;
+    });
+  }
+
   viewShift(shift) {
-    //this.user.setCurrentShift(this.shifts[0]);
-    this.navCtrl.push(ShiftsPage, shift);
+    this.navCtrl.push(ShiftPage, shift);
   }
 
   getShifts(refresher?) {
@@ -94,6 +99,7 @@ export class ShiftsPage {
       {
         text: 'Confirm',
         handler: () => {
+          this.currentShift = shift._id;
           this.delivData.setCurrentShift(shift)
         }
       }]

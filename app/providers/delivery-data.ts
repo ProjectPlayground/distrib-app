@@ -40,6 +40,11 @@ export class DeliveryData {
     return this.authHttp.delete(this.apiUrl+'shifts/'+shift._id)
   }
 
+  waypointStatus(shift, waypoint, status) {
+    return this.authHttp.patch(this.apiUrl+'shifts/'+shift._id+'/waypoints/'+waypoint._id, {status: status})
+      .map(res => res.json());
+  }
+
   setCurrentShift(shift) {
     this.storage.set('currentShift', shift._id); // save id of current shift (cant save objects)
   }

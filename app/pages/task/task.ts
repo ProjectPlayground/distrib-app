@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AlertController, App, ItemSliding, List, NavController } from 'ionic-angular';
+import { AlertController, App, ItemSliding, List, NavController, NavParams } from 'ionic-angular';
 import { DeliveryData } from '../../providers/delivery-data';
 
 @Component({
@@ -9,6 +9,8 @@ export class TaskPage {
 
   currentShift: any = {};
   currentTask: any = {};
+  taskStatus;
+  taskIndex;
   
   alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
   shiftComplete = false;
@@ -17,40 +19,41 @@ export class TaskPage {
     public alertCtrl: AlertController,
     public app: App,
     public navCtrl: NavController,
-    public delivData: DeliveryData
-  ) { }
-
-	ngOnInit() {
-    // this.getCurrentShift();
+    public delivData: DeliveryData,
+    public navParams: NavParams
+  ) { 
+    this.currentShift = navParams.data.shift;
+    this.currentTask = navParams.data.task;
+    this.taskIndex = navParams.data.index;
+    this.taskStatus = navParams.data.task.status;
   }
 
-  // getCurrentShift(refresher?) {
-  //   this.delivData.getCurrentShift()
-  //   .subscribe(data => {
-  //     this.currentShift = data;
-  //     this.getCurrentTask();
-  //   }, err => {
-  //     this.handleError(err);
-  //   }, () => {
-  //     if (refresher) {
-  //       refresher.complete();
-  //     };
-  //   });
-  // }
-
-  getCurrentTask() {
-  	for (let i = 0; i < this.currentShift.waypoints.length; i++) {
-  		let task = this.currentShift.waypoints[i];
-  		if ( task.status === "active") { 
-  			this.currentTask = task; 
-  			return;
-  		} else if (task.status==="incomplete") {
-  			this.currentTask = task; 
-  			return;
-  		}
-  	}
-  	this.shiftComplete = true;
+  waypointStatus(status) {
+    let alert = this.alertCtrl.create({
+      title: 'Are you sure?',
+      buttons: ['Cancel',
+      {
+        text: 'Confirm',
+        handler: () => {
+          this.delivData.waypointStatus(this.currentShift, this.currentTask, status)
+          .subscribe(data => {
+            this.taskStatus = status;
+          }, err => {
+            this.handleError(err);
+          });
+        }
+      }]
+    });
+    alert.present();
   }
+
+  getGoogleMapsURL(address) {
+    return 'https://www.google.ca/maps/place/' +
+      this.currentTask.address.address1 + ',' +
+      this.currentTask.address.city + ',' +
+      this.currentTask.address.postal;
+  }
+
 
   getMinutes(seconds) {
     return Math.round(seconds/60);

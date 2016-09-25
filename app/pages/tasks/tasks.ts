@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { AlertController, App, ItemSliding, List, NavController, LoadingController } from 'ionic-angular';
+import { AlertController, App, ItemSliding, List, NavController, LoadingController, NavParams } from 'ionic-angular';
 import { DeliveryData } from '../../providers/delivery-data';
 import { TaskPage } from '../../pages/task/task';
 
@@ -25,10 +25,11 @@ export class TasksPage {
     public alertCtrl: AlertController,
     public loadingCtrl: LoadingController,
     public navCtrl: NavController,
-    public delivData: DeliveryData
+    public delivData: DeliveryData,
+    public navParams: NavParams
   ) { }
 
-  ngOnInit() {
+  ionViewWillEnter() {
     this.getCurrentShift();
   }
 
@@ -55,8 +56,21 @@ export class TasksPage {
     });
   }
 
-  viewTask(task, i) {
-    this.navCtrl.push(TaskPage, task, i);
+  getNextTask() {
+    for (let i = 0; i < this.currentShift.waypoints.length; i++) {
+      let task = this.currentShift.waypoints[i];
+      if ( task.status === "active") { 
+        this.currentTask = task; 
+        return;
+      } else if (task.status==="incomplete") {
+        this.currentTask = task; 
+        return;
+      }
+    }
+  }
+
+  viewTask(task, index) {
+    this.navCtrl.push(TaskPage, {shift: this.currentShift, task: task, index: index});
   }
 
   loadMap() {
