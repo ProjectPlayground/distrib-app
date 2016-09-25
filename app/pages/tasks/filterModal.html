@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons start>
+      <button (click)="viewCtrl.dismiss()">Cancel</button>
+    </ion-buttons>
+    <ion-title>
+      Task filters
+    </ion-title>
+    <ion-buttons end>
+      <button (click)="done()">Done</button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item>
+    <ion-label>Incomplete</ion-label>
+    <ion-toggle [(ngModel)]="filters.incomplete"></ion-toggle>
+  </ion-item>
+  <ion-item>
+    <ion-label>Active</ion-label>
+    <ion-toggle [(ngModel)]="filters.active"></ion-toggle>
+  </ion-item>
+  <ion-item>
+    <ion-label>Completed</ion-label>
+    <ion-toggle [(ngModel)]="filters.completed"></ion-toggle>
+  </ion-item>
+    <ion-item>
+    <ion-label>Pickups</ion-label>
+    <ion-toggle [(ngModel)]="filters.pickup"></ion-toggle>
+  </ion-item>
+  <ion-item>
+    <ion-label>Deliveries</ion-label>
+    <ion-toggle [(ngModel)]="filters.delivery"></ion-toggle>
+  </ion-item>
+  <ion-item>
+    <ion-label>Start Location</ion-label>
+    <ion-toggle [(ngModel)]="filters.start"></ion-toggle>
+  </ion-item>
+  <ion-item>
+    Display<ion-badge item-right>{{filters.displayNum}} Orders</ion-badge>
+  </ion-item>
+  <ion-item>
+    <ion-range min="0" max="20" [(ngModel)]="filters.displayNum" pin>
+      <ion-label range-left>0</ion-label>
+      <ion-label range-right>20</ion-label>
+    </ion-range>
+  </ion-item>
+</ion-content>

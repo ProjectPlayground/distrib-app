@@ -25,7 +25,7 @@
     <ion-list-header style="text-align: center" [hidden]="currentShift.waypoints.length > 0">
       No tasks... Pull down to refresh!
     </ion-list-header>
-    <button ion-item detail-none class="capitalize">
+    <button ion-item detail-none *ngIf="filters.start" class="capitalize">
       <h3>
         <b>Start location</b> <ion-icon name="home"></ion-icon>
         <p style="float: right;">Shift start: <b>{{currentShift.startTime | date:"shortTime"}}</b></p>

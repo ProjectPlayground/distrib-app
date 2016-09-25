@@ -1,7 +1,8 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { AlertController, App, ItemSliding, List, NavController, LoadingController, NavParams } from 'ionic-angular';
+import { AlertController, App, ItemSliding, List, NavController, LoadingController, NavParams, ModalController } from 'ionic-angular';
 import { DeliveryData } from '../../providers/delivery-data';
 import { TaskPage } from '../../pages/task/task';
+import { filterModal } from './filterModal';
 
 declare var google;
 
@@ -20,13 +21,24 @@ export class TasksPage {
   labelIndex = 0;
   mapLoaded = false;
 
+  filters = {
+    incomplete: true,
+    active: true,
+    completed: false,
+    pickup: true,
+    delivery: true,
+    displayNum: 20,
+    start: true
+  };
+
   constructor (
     public app: App,
     public alertCtrl: AlertController,
     public loadingCtrl: LoadingController,
     public navCtrl: NavController,
     public delivData: DeliveryData,
-    public navParams: NavParams
+    public navParams: NavParams,
+    public modalCtrl: ModalController
   ) { }
 
   ionViewWillEnter() {
@@ -38,6 +50,17 @@ export class TasksPage {
       this.loadMap();
       this.mapLoaded = true;
     }
+  }
+
+  filterChange() {
+    let modal = this.modalCtrl.create(filterModal, this.filters);
+    modal.present();
+    modal.onDidDismiss((data) => {
+      if (data) {
+        this.filters = data;
+        this.getCurrentShift();
+      }
+    });
   }
 
   getCurrentShift(refresher?) {
