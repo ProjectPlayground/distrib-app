@@ -45,6 +45,20 @@ export class DeliveryData {
       .map(res => res.json());
   }
 
+  orderStatus(waypoint, status) {
+    let order = waypoint.orders[0]._id;
+    let setStatus;
+    if (waypoint.activity === 'delivery' && status === 'active') {
+      setStatus = 'in-transit';
+    } else if (waypoint.activity === 'delivery' && status === 'completed') {
+      setStatus = 'delivered';
+    } else if (waypoint.activity === 'pickup' && status === 'completed') {
+      setStatus = 'picked-up';
+    }
+    return this.authHttp.patch(this.apiUrl+'orders/'+order+'/status/', {status: status})
+      .map(res => res.json());
+  }
+
   setCurrentShift(shift) {
     this.storage.set('currentShift', shift._id); // save id of current shift (cant save objects)
   }

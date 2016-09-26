@@ -70,7 +70,7 @@ export class TasksPage {
         .subscribe(data => {
           this.currentShift = data;
         }, err => {
-          this.handleError(err);
+          this.handleError(err, 'noshift');
         }, () => {
           if (refresher) {
             refresher.complete();
@@ -83,7 +83,7 @@ export class TasksPage {
     for (let i = 0; i < this.currentShift.waypoints.length; i++) {
       let task = this.currentShift.waypoints[i];
       if ( task.status === "active") { 
-        this.currentTask = task; 
+        this.currentTask = task;
         return;
       } else if (task.status==="incomplete") {
         this.currentTask = task; 
@@ -129,10 +129,16 @@ export class TasksPage {
     return Math.round(seconds/60);
   }
 
-  handleError(err) {
+  handleError(err, type) {
+    let message = 'Problem with server';
+    let submessage = err;
+    if (type === 'noshift') {
+      message = 'No shift selected';
+      submessage = 'View a shift';
+    }
     let alert = this.alertCtrl.create({
-      title: 'Problem with server',
-      subTitle: err,
+      title: message,
+      subTitle: submessage,
       buttons: ['OK']
     });
     alert.present();

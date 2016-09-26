@@ -19,7 +19,7 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-list>
-    <ion-list-header style="text-align: center" [hidden]="shifts[0]">
+    <ion-list-header style="text-align: center" *ngIf="shifts[0]">
       No shifts... Pull down to refresh!
     </ion-list-header>
     <ion-item-sliding *ngFor="let shift of shifts">

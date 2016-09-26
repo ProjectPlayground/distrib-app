@@ -21,11 +21,11 @@
   <ion-refresher *ngIf="segment === 'list'" (ionRefresh)="getCurrentShift($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <ion-list *ngIf="segment === 'list' && currentShift.waypoints">
-    <ion-list-header style="text-align: center" [hidden]="currentShift.waypoints.length > 0">
+  <ion-list *ngIf="segment === 'list'">
+    <ion-list-header style="text-align: center" *ngIf="!currentShift.waypoints?.length > 0">
       No tasks... Pull down to refresh!
     </ion-list-header>
-    <button ion-item detail-none *ngIf="filters.start" class="capitalize">
+    <button ion-item detail-none *ngIf="currentShift.waypoints" class="capitalize">
       <h3>
         <b>Start location</b> <ion-icon name="home"></ion-icon>
         <p style="float: right;">Shift start: <b>{{currentShift.startTime | date:"shortTime"}}</b></p>

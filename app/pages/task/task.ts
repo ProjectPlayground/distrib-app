@@ -41,6 +41,12 @@ export class TaskPage {
           }, err => {
             this.handleError(err);
           });
+          this.delivData.orderStatus(this.currentTask, status)
+          .subscribe(data => {
+            this.taskStatus = status;
+          }, err => {
+            this.handleError(err);
+          });
         }
       }]
     });
@@ -53,7 +59,6 @@ export class TaskPage {
       this.currentTask.address.city + ',' +
       this.currentTask.address.postal;
   }
-
 
   getMinutes(seconds) {
     return Math.round(seconds/60);

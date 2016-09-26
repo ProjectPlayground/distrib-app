@@ -36,7 +36,6 @@ export class AuthService {
   zoneImpl: NgZone;
   
   constructor(private authHttp: AuthHttp, zone: NgZone, public events: Events) {
-
     this.zoneImpl = zone;
     // Check if there is a profile saved in local storage
     this.local.get('profile').then(profile => {

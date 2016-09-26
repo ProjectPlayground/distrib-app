@@ -51,7 +51,7 @@ export class MyApp {
       StatusBar.styleDefault();
       Splashscreen.hide();
     });
-    // Check to see if user authenticated, if not then display auth0
+    //Check to see if user authenticated, if not then display auth0
     setTimeout(() => {
       if (!this.auth.authenticated()) {
         this.nav.setRoot(AuthPage);
