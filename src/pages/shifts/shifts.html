@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-navbar no-border-bottom>
+    <ion-buttons start>
+      <button ion-button icon-only (click)="addShift()">
+      <ion-icon name="add"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>Shifts</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="filterChange()">
+        <ion-icon name="list"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher (ionRefresh)="getShifts($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-list>
+    <ion-list-header style="text-align: center" [hidden]="shifts[0]">
+      No shifts... Pull down to refresh!
+    </ion-list-header>
+    <ion-item-sliding *ngFor="let shift of shifts">
+      <button ion-item secondary detail-none (click)="viewShift(shift)">
+        <h2><b>{{shift.startTime | date:"fullDate"}}</b></h2>
+        <p class="top-right" *ngIf="shift._id == currentShift">Viewing</p>
+        <h3>{{shift.startTime | date:"shortTime"}} to {{shift.endTime | date:"shortTime"}}</h3>
+        <h3 style="float: left;">Waypoints: {{shift.waypoints.length}}</h3>
+<!--         <h3 *ngIf="shift.status === 'incomplete'" style="float: right; color: red">Incomplete</h3>
+        <h3 *ngIf="shift.status === 'active'" style="float: right; color: blue">Active</h3>
+        <h3 *ngIf="shift.status === 'complete'" style="float: right; color: green">Complete</h3> -->
+      </button>
+      <ion-item-options side="right">
+        <button danger (click)="deleteShift(shift)">
+          <ion-icon name="trash"></ion-icon>
+          Delete
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+</ion-content>

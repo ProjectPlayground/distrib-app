@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Shift</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding text-center>
+  <h3>
+  	<b>{{shift.startTime | date:"EEEE, MMMM, d"}}</b><br>
+  	{{shift.startTime | date:"shortTime"}} to {{shift.endTime | date:"shortTime"}}
+	</h3>
+	<h6>
+		Start by: {{shift.stats.actualStart | date:"shortTime"}} | End at: {{shift.stats.actualEnd | date:"shortTime"}}
+	</h6>
+	<p>Orders: {{shift.stats.numOrders}} | Stores: {{shift.stats.numStores}}</p>
+	<p class="capitalize">Status: {{shift.status}}</p>
+	<ion-grid>
+	  <ion-row>
+	    <ion-col width-30>
+	    	<button ion-button color="primary" outline block (click)="selectShift()">View</button>
+			</ion-col>
+	    <ion-col width-40>
+	    	<button ion-button color="secondary" outline block (click)="activeShift()" *ngIf="shift.status === 'incomplete'">Start</button>
+	    	<button ion-button color="secondary" outline block (click)="completeShift()" *ngIf="shift.status === 'active'">Complete</button>			
+	    </ion-col>
+	    <ion-col width-30>
+	    	<button ion-button color="danger" outline block (click)="deleteShift()">Delete</button>
+			</ion-col>
+	  </ion-row>
+	</ion-grid>
+</ion-content>
