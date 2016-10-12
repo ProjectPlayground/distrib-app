@@ -1,22 +1,15 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
+import { AuthService } from '../../providers/auth';
 
-/*
-  Generated class for the User page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
 @Component({
   selector: 'page-user',
   templateUrl: 'user.html'
 })
-export class User {
+export class UserPage {
 
-  constructor(public navCtrl: NavController) {}
+  constructor(public navCtrl: NavController, public auth: AuthService) {
 
-  ionViewDidLoad() {
-    console.log('Hello User Page');
   }
 
 }

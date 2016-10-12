@@ -1,22 +1,31 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavParams, ViewController, AlertController } from 'ionic-angular';
+import moment from 'moment';
 
-/*
-  Generated class for the ShiftsFilter page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
 @Component({
   selector: 'page-shifts-filter',
   templateUrl: 'shifts-filter.html'
 })
-export class ShiftsFilter {
+export class ShiftsFilterPage {
 
-  constructor(public navCtrl: NavController) {}
+  filters: any = {};
+  filterStart: string;
+  filterEnd: string;
 
-  ionViewDidLoad() {
-    console.log('Hello ShiftsFilter Page');
+  constructor(
+    public alert: AlertController, 
+    public viewCtrl: ViewController,
+    public navParams: NavParams
+  ) {
+    this.filters = navParams.data;
+    this.filterStart = moment(this.filters.start).format('YYYY-MM-DDTHH:mmZ');
+    this.filterEnd = moment(this.filters.end).format('YYYY-MM-DDTHH:mmZ');
+  }
+
+  done() {
+    this.filters.start = new Date(new Date(this.filterStart).setHours(0,0,0,0));
+    this.filters.end = new Date(new Date(this.filterEnd).setHours(23,59,0,0));
+    this.viewCtrl.dismiss(this.filters);
   }
 
 }

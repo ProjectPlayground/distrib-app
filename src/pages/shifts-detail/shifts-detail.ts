@@ -1,22 +1,70 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { AlertController, NavController, NavParams } from 'ionic-angular';
+import { DeliveryData } from '../../providers/delivery-data';
 
-/*
-  Generated class for the ShiftsDetail page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
 @Component({
   selector: 'page-shifts-detail',
   templateUrl: 'shifts-detail.html'
 })
-export class ShiftsDetail {
-
-  constructor(public navCtrl: NavController) {}
-
-  ionViewDidLoad() {
-    console.log('Hello ShiftsDetail Page');
+export class ShiftsDetailPage {
+  shift: any = {};
+  constructor (
+  	public navCtrl: NavController, 
+  	public navParams: NavParams,
+  	public delivData: DeliveryData,
+  	public alertCtrl: AlertController
+  ) {
+  	this.shift = navParams.data;
   }
 
+  activeShift() {
+
+  }
+
+  completeShift() {
+    
+  }
+
+  selectShift() {
+    let alert = this.alertCtrl.create({
+      title: 'View this shift?',
+      buttons: ['Cancel',
+      {
+        text: 'Confirm',
+        handler: () => {
+          this.delivData.setCurrentShift(this.shift)
+        }
+      }]
+    });
+    alert.present();
+  }
+
+  deleteShift() {
+    let alert = this.alertCtrl.create({
+      title: 'Delete?',
+      buttons: ['Cancel',
+      {
+        text: 'Confirm',
+        handler: () => {
+          this.delivData.deleteShift(this.shift)
+          .subscribe(data => {
+            this.navCtrl.pop();
+            this.navCtrl.pop();
+          }, err => {
+            this.handleError(err);
+          });
+        }
+      }]
+    });
+    alert.present();
+  }
+
+  handleError(err) {
+    let alert = this.alertCtrl.create({
+      title: 'Problem with server',
+      subTitle: err,
+      buttons: ['OK']
+    });
+    alert.present();
+  }
 }

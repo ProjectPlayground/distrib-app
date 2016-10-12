@@ -1,18 +1,89 @@
-<!--
-  Generated template for the Tasks page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
-
-  <ion-navbar>
-    <ion-title>tasks</ion-title>
+  <ion-navbar no-border-bottom>
+    <ion-segment [(ngModel)]="segment">
+      <ion-segment-button value="list" (ionSelect)="mapLoaded = false">
+        List
+      </ion-segment-button>
+      <ion-segment-button value="map">
+        Map
+      </ion-segment-button>
+    </ion-segment>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="filterChange()">
+        <ion-icon name="list"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
-
 </ion-header>
 
-
-<ion-content padding>
-
+<ion-content [ngSwitch]="segment">
+  <!-- *************** LIST ******************* -->
+  <ion-refresher *ngIf="segment === 'list'" (ionRefresh)="getCurrentShift($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-list *ngIf="segment === 'list' && currentShift.waypoints">
+    <ion-list-header style="text-align: center" [hidden]="currentShift.waypoints.length > 0">
+      No tasks... Pull down to refresh!
+    </ion-list-header>
+    <button ion-item detail-none *ngIf="filters.start" class="capitalize">
+      <h3>
+        <b>Start location</b> <ion-icon name="home"></ion-icon>
+        <p style="float: right;">Shift start: <b>{{currentShift.startTime | date:"shortTime"}}</b></p>
+      </h3>
+      <h4>
+        <span *ngIf="currentShift.address.address1">
+          {{currentShift.address.address1}}
+          {{currentShift.address.city}}, {{currentShift.address.postal}}
+        </span>
+      </h4>
+      <h6>
+       Lat: {{currentShift.location?.latitude}}<br>Lon: {{currentShift.location?.longitude}}
+        <p style="float: right;">Depart by: <b>{{currentShift.stats?.actualStart | date:"shortTime"}}</b></p>
+      </h6>
+    </button>
+    <div *ngFor="let waypoint of currentShift.waypoints; let i=index">
+      <ion-item-divider light class="capitalize">
+        <ion-badge item-left>{{alphabet[i]}}</ion-badge>
+          <span style="float: right;">
+            <ion-icon name="car"></ion-icon> {{getMinutes(waypoint.timeFromPrevious)}} min -
+              <span *ngIf="waypoint.status === 'incomplete'" style="color: red">Incomplete</span>
+              <span *ngIf="waypoint.status === 'active'" style="color: blue">Active</span>
+              <span *ngIf="waypoint.status === 'complete'" style="color: green">Complete</span>
+          </span>
+      </ion-item-divider>
+      <ion-item-sliding>
+        <button ion-item detail-none class="capitalize" (click)="viewTask(waypoint, i)">
+          <h3><b>
+            <span *ngIf="waypoint.activity === 'pickup'">
+              {{waypoint.orders[0].store.name}} <ion-icon name="cart"></ion-icon>
+            </span>
+            <span *ngIf="waypoint.activity === 'delivery'">
+              {{waypoint.orders[0].customerName}} <ion-icon name="person"></ion-icon>
+            </span></b>
+            <p style="float: right;">Arrive by: <b>{{waypoint.arrivalTime | date:"shortTime"}}</b></p>
+          </h3>
+          <h4>
+            {{waypoint.address.address1}}<span *ngIf="waypoint.address.address2">, {{waypoint.address.address2}}</span><br>
+            {{waypoint.address.city}}, {{waypoint.address.postal}}
+          </h4>
+          <h6>
+            {{waypoint.activity}}: {{waypoint.orders.length}} Orders
+            <p style="float: right;">Depart by: <b>{{waypoint.departureTime | date:"shortTime"}}</b></p>
+          </h6>
+        </button>
+        <ion-item-options side="right">
+          <button primary>
+            <ion-icon name="text"></ion-icon>
+            Maps
+          </button>
+          <button secondary>
+            <ion-icon name="call"></ion-icon>
+            Contact
+          </button>
+        </ion-item-options>
+      </ion-item-sliding>
+    </div>
+  </ion-list>
+  <!-- *************** MAP ******************* -->
+  <div #map id="map" *ngIf="segment === 'map'"></div>  
 </ion-content>
