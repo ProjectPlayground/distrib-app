@@ -1,20 +1,21 @@
 import { Component } from '@angular/core';
-
+import { NavParams } from 'ionic-angular';
 import { HomePage } from '../home/home';
-import { AboutPage } from '../about/about';
-import { ContactPage } from '../contact/contact';
+import { TasksPage } from '../tasks/tasks';
+import { ShiftsPage } from '../shifts/shifts';
+import { UserPage } from '../user/user';
 
 @Component({
   templateUrl: 'tabs.html'
 })
 export class TabsPage {
-  // this tells the tabs component which Pages
-  // should be each tab's root Page
   tab1Root: any = HomePage;
-  tab2Root: any = AboutPage;
-  tab3Root: any = ContactPage;
+  tab2Root: any = TasksPage;
+  tab3Root: any = ShiftsPage;
+  tab4Root: any = UserPage;
+  selectedIndex: number;
 
-  constructor() {
-
+  constructor(navParams: NavParams) {
+  	this.selectedIndex = navParams.data.tabIndex || 0;
   }
 }
