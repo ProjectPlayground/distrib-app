@@ -31,44 +31,46 @@ export class AuthService {
     languageDictionary: {
       title: "Welcome to the future!"
     },
-    // auth: {
-    //   redirect: false,
-    //   params: {
-    //     scope: 'openid email offline_access',
-    //   },
-    //   responseType: "token"
-    // }
+    auth: {
+      redirect: false,
+      params: {
+        scope: 'openid email offline_access',
+      },
+      responseType: "token"
+    }
   });
 
-  local: Storage;
   refreshSubscription: any;
-  user: Object;
+  user: any;
   zoneImpl: NgZone;
 
   constructor (
   	private authHttp: AuthHttp, 
   	public events: Events,
   	zone: NgZone, 
-  	local: Storage
+  	public local: Storage
 	) {
 
    	if(Auth0Vars.AUTH0_CLIENT_ID == "AUTH0_CLIENT_ID" || Auth0Vars.AUTH0_DOMAIN == "AUTH0_DOMAIN ")
       alert("ERROR: set auth0 variables!")
 
     this.zoneImpl = zone;
-    this.local = local;
 
     this.lock.show();
 
     // Check if there is a profile saved in local storage
-    this.local.get('profile').then(profile => {
-      this.user = JSON.parse(profile);
-    }).catch(error => {
-      console.log(error);
-    });
+    // this.local.get('profile').then(profile => {
+    //   this.user = JSON.parse(profile);
+    // }).catch(error => {
+    //   console.log(error);
+    // });
+
+    if(window.localStorage.getItem('profile'))
+      this.user = window.localStorage.getItem('profile');
 
     this.lock.on('authenticated', authResult => {
-      this.local.set('id_token', authResult.idToken);
+      // this.local.set('id_token', authResult.idToken);
+      window.localStorage.setItem('id_token', authResult.idToken);
       // Fetch profile information
       this.lock.getProfile(authResult.idToken, (error, profile) => {
         if (error) {
@@ -81,7 +83,8 @@ export class AuthService {
           data => {
             profile.user_metadata = profile.user_metadata || {};
             profile = Object.assign(profile, data)
-            this.local.set('profile', JSON.stringify(profile));
+            // this.local.set('profile', JSON.stringify(profile));
+            window.localStorage.setItem('profile', JSON.stringify(profile));
             this.user = profile;
           },
           error => alert(error)
@@ -89,9 +92,9 @@ export class AuthService {
       });
       this.lock.hide();
       this.events.publish('user:login');
-      this.local.set('refresh_token', authResult.refreshToken);
+      // this.local.set('refresh_token', authResult.refreshToken);
+      window.localStorage.setItem('refresh_token', authResult.refreshToken);
       this.zoneImpl.run(() => this.user = authResult.profile);
-      this.scheduleRefresh();
     });
   }
 
@@ -106,85 +109,13 @@ export class AuthService {
   }
 
   public logout() {
-    this.local.remove('profile');
-    this.local.remove('id_token');
-    this.local.remove('refresh_token');
+    // this.local.remove('profile');
+    // this.local.remove('id_token');
+    // this.local.remove('refresh_token');
+    window.localStorage.removeItem('profile');
+    window.localStorage.removeItem('id_token');
+    window.localStorage.removeItem('refresh_token');
     this.zoneImpl.run(() => this.user = null);
-    // Unschedule the token refresh
-    this.unscheduleRefresh();
   }
 
-  public scheduleRefresh() {
-    // If the user is authenticated, use the token stream
-    // provided by angular2-jwt and flatMap the token
-    let source = this.authHttp.tokenStream.flatMap(
-      token => {
-        // The delay to generate in this case is the difference
-        // between the expiry time and the issued at time
-        let jwtIat = this.jwtHelper.decodeToken(token).iat;
-        let jwtExp = this.jwtHelper.decodeToken(token).exp;
-        let iat = new Date(0);
-        let exp = new Date(0);
-
-        let delay = (exp.setUTCSeconds(jwtExp) - iat.setUTCSeconds(jwtIat));
-
-        return Observable.interval(delay);
-      });
-
-    this.refreshSubscription = source.subscribe(() => {
-      this.getNewJwt();
-    });
-  }
-
-  public startupTokenRefresh() {
-    // If the user is authenticated, use the token stream
-    // provided by angular2-jwt and flatMap the token
-    if (this.authenticated()) {
-      let source = this.authHttp.tokenStream.flatMap(
-        token => {
-          // Get the expiry time to generate
-          // a delay in milliseconds
-          let now: number = new Date().valueOf();
-          let jwtExp: number = this.jwtHelper.decodeToken(token).exp;
-          let exp: Date = new Date(0);
-          exp.setUTCSeconds(jwtExp);
-          let delay: number = exp.valueOf() - now;
-
-          // Use the delay in a timer to
-          // run the refresh at the proper time
-          return Observable.timer(delay);
-        });
-
-      // Once the delay time from above is
-      // reached, get a new JWT and schedule
-      // additional refreshes
-      source.subscribe(() => {
-        this.getNewJwt();
-        this.scheduleRefresh();
-      });
-    }
-  }
-
-  public unscheduleRefresh() {
-    // Unsubscribe fromt the refresh
-    if (this.refreshSubscription) {
-      this.refreshSubscription.unsubscribe();
-    }
-  }
-
-  public getNewJwt() {
-    // Get a new JWT from Auth0 using the refresh token saved
-    // in local storage
-    this.local.get('refresh_token').then(token => {
-      this.auth0.refreshToken(token, (err, delegationRequest) => {
-        if (err) {
-          alert(err);
-        }
-        this.local.set('id_token', delegationRequest.id_token);
-      });
-    }).catch(error => {
-      console.log(error);
-    });
-
-  }
 }
