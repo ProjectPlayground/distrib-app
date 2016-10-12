@@ -1,66 +1,62 @@
+import { Events } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { AuthHttp, JwtHelper, tokenNotExpired } from 'angular2-jwt';
 import { Injectable, NgZone } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
 
-// Avoid name not found warnings
 declare var Auth0: any;
 declare var Auth0Lock: any;
-// declare var faker = require('faker');
 
 export class Auth0Vars {
-  //application's clientId in Auth0.
-  static AUTH0_CLIENT_ID = "AUTH0_CLIENT_ID";
-  static AUTH0_DOMAIN = "AUTH0_DOMAIN";
-
+  static AUTH0_CLIENT_ID = "mtQanzM5F1P2NXQLFptakp6MsDRYAhpP";
+  static AUTH0_DOMAIN = "distrib.auth0.com";
 }
 
 @Injectable()
 export class AuthService {
 
   jwtHelper: JwtHelper = new JwtHelper();
-
   auth0 = new Auth0({ clientID: Auth0Vars.AUTH0_CLIENT_ID, domain: Auth0Vars.AUTH0_DOMAIN });
+  lock = new Auth0Lock(Auth0Vars.AUTH0_CLIENT_ID, Auth0Vars.AUTH0_DOMAIN, {
+    redirect: false,
+    autoclose: true,
+    avatar: null,
+    closable: false,
+    rememberLastLogin: true,
+    theme: {
+      logo: "https://dl.dropboxusercontent.com/s/wd0og2bqy7z7uuk/Picture1.png?dl=0",
+      primaryColor: "green"
+    },
+    socialButtonStyle: 'small',
+    languageDictionary: {
+      title: "Welcome to the future!"
+    },
+    // auth: {
+    //     redirect: false,
 
-  lock = new Auth0Lock(Auth0Vars.AUTH0_CLIENT_ID, Auth0Vars.AUTH0_DOMAIN
-    , {
-      redirect: false,
-      autoclose: true,
-      avatar: null,
-      closable: false,
-      rememberLastLogin: true,
-      // language: 'pt-br',
-      theme: {
-        // primaryColor: 'green',
-        // logo: 'assets/img/logo.jpg',
-        // labeledSubmitButton: true //This option indicates whether or not the submit button
-        // should have a label, and defaults to true. When set to false, an icon will be shown instead.
-      },
-      languageDictionary: {
-        title: "Teeth"
-      },
-      // auth: {
-      //     redirect: false,
-
-      //   params: {
-      //     scope: 'openid offline_access',
-      //   },
-      //   // redirectUrl: "localhost:8100",
-      //   // responseType: "token",
-      //   // ss,
-      // }
-    }
-  );
+    //   params: {
+    //     scope: 'openid offline_access',
+    //   },
+    //   // redirectUrl: "localhost:8100",
+    //   // responseType: "token",
+    //   // ss,
+    // }
+  });
 
   local: Storage;
   refreshSubscription: any;
   user: Object;
   zoneImpl: NgZone;
 
-  constructor(private authHttp: AuthHttp, zone: NgZone, local: Storage) {
-     
-     if(Auth0Vars.AUTH0_CLIENT_ID == "AUTH0_CLIENT_ID" || Auth0Vars.AUTH0_DOMAIN == "AUTH0_DOMAIN ")
-       alert("ERROR: set auth0 variables!")
+  constructor (
+  	private authHttp: AuthHttp, 
+  	public events: Events,
+  	zone: NgZone, 
+  	local: Storage
+	) {
+
+   	if(Auth0Vars.AUTH0_CLIENT_ID == "AUTH0_CLIENT_ID" || Auth0Vars.AUTH0_DOMAIN == "AUTH0_DOMAIN ")
+      alert("ERROR: set auth0 variables!")
 
     this.zoneImpl = zone;
     this.local = local;
@@ -74,32 +70,31 @@ export class AuthService {
       console.log(error);
     });
 
-
     this.lock.on('authenticated', authResult => {
       this.local.set('id_token', authResult.idToken);
-
       // Fetch profile information
       this.lock.getProfile(authResult.idToken, (error, profile) => {
         if (error) {
-          // TODO: tratar erro 
-          console.error("erro ao retornar perfil", error);
+          alert(error);
           return;
         }
-
-        profile.user_metadata = profile.user_metadata || {};
-        this.local.set('profile', JSON.stringify(profile));
-        this.user = profile;
+        this.authHttp.get('https://server-distrib.rhcloud.com/api/users/me')
+        .map(res => res.json())
+        .subscribe(
+          data => {
+            profile.user_metadata = profile.user_metadata || {};
+            profile = Object.assign(profile, data)
+            this.local.set('profile', JSON.stringify(profile));
+            this.user = profile;
+          },
+          error => alert(error)
+         );
       });
-
       this.lock.hide();
-
       this.local.set('refresh_token', authResult.refreshToken);
       this.zoneImpl.run(() => this.user = authResult.profile);
-      // Schedule a token refresh
       this.scheduleRefresh();
-
     });
-
   }
 
   public authenticated() {
