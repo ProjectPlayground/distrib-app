@@ -21,6 +21,11 @@
   <ion-refresher *ngIf="segment === 'list'" (ionRefresh)="getCurrentShift($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
+  <ion-list *ngIf="segment === 'list' && !currentShift.waypoints">
+    <ion-list-header style="text-align: center">
+      No shift... Please view a shift!
+    </ion-list-header>
+  </ion-list>
   <ion-list *ngIf="segment === 'list' && currentShift.waypoints">
     <ion-list-header style="text-align: center" [hidden]="currentShift.waypoints.length > 0">
       No tasks... Pull down to refresh!

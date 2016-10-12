@@ -22,7 +22,7 @@ export class AuthService {
     autoclose: true,
     avatar: null,
     closable: false,
-    rememberLastLogin: true,
+    rememberLastLogin: false,
     theme: {
       logo: "https://dl.dropboxusercontent.com/s/wd0og2bqy7z7uuk/Picture1.png?dl=0",
       primaryColor: "green"
@@ -58,19 +58,19 @@ export class AuthService {
 
     this.lock.show();
 
-    // Check if there is a profile saved in local storage
-    // this.local.get('profile').then(profile => {
-    //   this.user = JSON.parse(profile);
-    // }).catch(error => {
-    //   console.log(error);
-    // });
-
     if(window.localStorage.getItem('profile'))
       this.user = window.localStorage.getItem('profile');
 
+    // Check if there is a profile saved in local storage
+    this.local.get('profile').then(profile => {
+      this.user = JSON.parse(profile);
+    }).catch(error => {
+      console.log(error);
+    });
+
     this.lock.on('authenticated', authResult => {
-      // this.local.set('id_token', authResult.idToken);
       window.localStorage.setItem('id_token', authResult.idToken);
+      this.local.set('id_token', authResult.idToken);
       // Fetch profile information
       this.lock.getProfile(authResult.idToken, (error, profile) => {
         if (error) {
@@ -83,8 +83,8 @@ export class AuthService {
           data => {
             profile.user_metadata = profile.user_metadata || {};
             profile = Object.assign(profile, data)
-            // this.local.set('profile', JSON.stringify(profile));
             window.localStorage.setItem('profile', JSON.stringify(profile));
+            this.local.set('profile', JSON.stringify(profile));
             this.user = profile;
           },
           error => alert(error)
@@ -92,8 +92,8 @@ export class AuthService {
       });
       this.lock.hide();
       this.events.publish('user:login');
-      // this.local.set('refresh_token', authResult.refreshToken);
       window.localStorage.setItem('refresh_token', authResult.refreshToken);
+      this.local.set('refresh_token', authResult.refreshToken);
       this.zoneImpl.run(() => this.user = authResult.profile);
     });
   }
@@ -109,12 +109,12 @@ export class AuthService {
   }
 
   public logout() {
-    // this.local.remove('profile');
-    // this.local.remove('id_token');
-    // this.local.remove('refresh_token');
     window.localStorage.removeItem('profile');
     window.localStorage.removeItem('id_token');
     window.localStorage.removeItem('refresh_token');
+    this.local.remove('profile');
+    this.local.remove('id_token');
+    this.local.remove('refresh_token');
     this.zoneImpl.run(() => this.user = null);
   }
 
