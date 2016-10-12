@@ -32,14 +32,11 @@ export class AuthService {
       title: "Welcome to the future!"
     },
     // auth: {
-    //     redirect: false,
-
+    //   redirect: false,
     //   params: {
-    //     scope: 'openid offline_access',
+    //     scope: 'openid email offline_access',
     //   },
-    //   // redirectUrl: "localhost:8100",
-    //   // responseType: "token",
-    //   // ss,
+    //   responseType: "token"
     // }
   });
 
@@ -91,6 +88,7 @@ export class AuthService {
          );
       });
       this.lock.hide();
+      this.events.publish('user:login');
       this.local.set('refresh_token', authResult.refreshToken);
       this.zoneImpl.run(() => this.user = authResult.profile);
       this.scheduleRefresh();
