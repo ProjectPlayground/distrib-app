@@ -35,9 +35,7 @@ export class MyApp {
 
   listenToLoginEvents() {
     this.events.subscribe('user:login', () => {
-      setTimeout(() => {
-        this.nav.setRoot(TabsPage);
-      }, 500);
+      this.nav.setRoot(TabsPage);
     });
     this.events.subscribe('user:signup', () => {
     });

@@ -14,12 +14,13 @@ export class Auth0Vars {
 
 @Injectable()
 export class AuthService {
-
+  
   jwtHelper: JwtHelper = new JwtHelper();
   auth0 = new Auth0({ clientID: Auth0Vars.AUTH0_CLIENT_ID, domain: Auth0Vars.AUTH0_DOMAIN });
   lock = new Auth0Lock(Auth0Vars.AUTH0_CLIENT_ID, Auth0Vars.AUTH0_DOMAIN, {
     avatar: null,
     closable: false,
+    container: "authLock",
     rememberLastLogin: false,
     theme: {
       logo: "https://dl.dropboxusercontent.com/s/wd0og2bqy7z7uuk/Picture1.png?dl=0",
