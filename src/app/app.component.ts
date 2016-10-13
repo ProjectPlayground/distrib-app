@@ -27,11 +27,9 @@ export class MyApp {
       StatusBar.styleDefault();
     });
     // Check to see if user authenticated, if not then display auth0
-    setTimeout(() => {
-      if (!this.auth.authenticated()) {
-        this.nav.setRoot(AuthPage);
-      }
-    }, 0);
+    if (!this.auth.authenticated()) {
+      this.auth.login();
+    }
     this.listenToLoginEvents();
   }
 
@@ -42,7 +40,7 @@ export class MyApp {
     this.events.subscribe('user:signup', () => {
     });
     this.events.subscribe('user:logout', () => {
-      this.nav.setRoot(AuthPage);
+      this.auth.login();
     });
   }
 
