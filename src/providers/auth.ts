@@ -41,26 +41,23 @@ export class AuthService {
     }
   });
 
+  local: Storage;
   refreshSubscription: any;
   user: any;
   zoneImpl: NgZone;
 
   constructor (
+    public events: Events,
   	private authHttp: AuthHttp, 
-  	public events: Events,
-  	zone: NgZone, 
-  	public local: Storage
+  	zone: NgZone,
+    local: Storage
 	) {
-
-   	if(Auth0Vars.AUTH0_CLIENT_ID == "AUTH0_CLIENT_ID" || Auth0Vars.AUTH0_DOMAIN == "AUTH0_DOMAIN ")
-      alert("ERROR: set auth0 variables!")
-
     this.zoneImpl = zone;
-
+    this.local = local;
     this.lock.show();
 
-    if(window.localStorage.getItem('profile'))
-      this.user = window.localStorage.getItem('profile');
+    // if(window.localStorage.getItem('profile'))
+    // this.user = window.localStorage.getItem('profile');
 
     // Check if there is a profile saved in local storage
     this.local.get('profile').then(profile => {
@@ -70,7 +67,7 @@ export class AuthService {
     });
 
     this.lock.on('authenticated', authResult => {
-      window.localStorage.setItem('id_token', authResult.idToken);
+      // window.localStorage.setItem('id_token', authResult.idToken);
       this.local.set('id_token', authResult.idToken);
       // Fetch profile information
       this.lock.getProfile(authResult.idToken, (error, profile) => {
@@ -84,7 +81,7 @@ export class AuthService {
           data => {
             profile.user_metadata = profile.user_metadata || {};
             profile = Object.assign(profile, data)
-            window.localStorage.setItem('profile', JSON.stringify(profile));
+            // window.localStorage.setItem('profile', JSON.stringify(profile));
             this.local.set('profile', JSON.stringify(profile));
             this.user = profile;
           },
@@ -93,7 +90,7 @@ export class AuthService {
       });
       this.lock.hide();
       this.events.publish('user:login');
-      window.localStorage.setItem('refresh_token', authResult.refreshToken);
+      // window.localStorage.setItem('refresh_token', authResult.refreshToken);
       this.local.set('refresh_token', authResult.refreshToken);
       this.zoneImpl.run(() => this.user = authResult.profile);
     });
@@ -106,13 +103,15 @@ export class AuthService {
 
   public login() {
     // Show the Auth0 Lock widget
+    this.lock.hide();
     this.lock.show();
   }
 
   public logout() {
-    window.localStorage.removeItem('profile');
-    window.localStorage.removeItem('id_token');
-    window.localStorage.removeItem('refresh_token');
+    this.events.publish('user:logout');
+    // window.localStorage.removeItem('profile');
+    // window.localStorage.removeItem('id_token');
+    // window.localStorage.removeItem('refresh_token');
     this.local.remove('profile');
     this.local.remove('id_token');
     this.local.remove('refresh_token');
