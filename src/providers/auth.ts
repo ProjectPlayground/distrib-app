@@ -55,13 +55,12 @@ export class AuthService {
     this.local = local;
 
     if (localStorage.getItem('profile')) {
-      this.user = localStorage.getItem('profile');
+      this.user = JSON.parse(localStorage.getItem('profile'));
     }
 
     // Check if there is a profile saved in local storage
     // this.local.get('profile').then(profile => {
     //   this.user = JSON.parse(profile);
-    //   console.log(this.user);
     // }).catch(error => {
     //   console.log(error);
     // });
