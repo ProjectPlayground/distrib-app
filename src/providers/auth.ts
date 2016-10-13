@@ -54,10 +54,6 @@ export class AuthService {
     this.zoneImpl = zone;
     this.local = local;
 
-    // if (localStorage.getItem('profile')) {
-    //   this.user = JSON.parse(localStorage.getItem('profile'));
-    // }
-
     // Check if there is a profile saved in local storage
     this.local.get('profile').then(profile => {
       this.user = JSON.parse(profile);
@@ -66,8 +62,7 @@ export class AuthService {
     });
 
     this.lock.on('authenticated', authResult => {
-      localStorage.setItem('id_token', authResult.idToken);
-      // this.local.set('id_token', authResult.idToken);
+      this.local.set('id_token', authResult.idToken);
       // Fetch profile information
       this.lock.getProfile(authResult.idToken, (error, profile) => {
         if (error) {
@@ -80,7 +75,6 @@ export class AuthService {
           data => {
             profile.user_metadata = profile.user_metadata || {};
             profile = Object.assign(profile, data)
-            // localStorage.setItem('profile', JSON.stringify(profile));
             this.local.set('profile', JSON.stringify(profile));
             this.user = profile;
           },
@@ -89,7 +83,6 @@ export class AuthService {
       });
       this.lock.hide();
       this.events.publish('user:login');
-      // localStorage.setItem('refresh_token', authResult.refreshToken);
       this.local.set('refresh_token', authResult.refreshToken);
       this.zoneImpl.run(() => this.user = authResult.profile);
     });
@@ -108,9 +101,6 @@ export class AuthService {
 
   public logout() {
     this.events.publish('user:logout');
-    // localStorage.removeItem('profile');
-    // localStorage.removeItem('id_token');
-    // localStorage.removeItem('refresh_token');
     this.local.remove('profile');
     this.local.remove('id_token');
     this.local.remove('refresh_token');
