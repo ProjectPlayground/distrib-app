@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { Events, Nav, Platform } from 'ionic-angular';
 import { StatusBar } from 'ionic-native';
 
+import { AuthPage } from '../pages/auth/auth';
 import { TabsPage } from '../pages/tabs/tabs';
 
 import { AuthService } from '../providers/auth';
@@ -28,7 +29,7 @@ export class MyApp {
     // Check to see if user authenticated, if not then display auth0
     setTimeout(() => {
       if (!this.auth.authenticated()) {
-        this.auth.login();
+        this.nav.setRoot(AuthPage);
       }
     }, 0);
     this.listenToLoginEvents();
@@ -43,7 +44,7 @@ export class MyApp {
     this.events.subscribe('user:signup', () => {
     });
     this.events.subscribe('user:logout', () => {
-      this.auth.login();
+      this.nav.setRoot(AuthPage);
     });
   }
 

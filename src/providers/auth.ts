@@ -36,7 +36,8 @@ export class AuthService {
       params: {
         scope: 'openid email offline_access',
       },
-      responseType: "token"
+      // responseType: "token",
+      sso: true
     }
   });
 

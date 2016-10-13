@@ -5,6 +5,7 @@ import { IonicApp, IonicModule } from 'ionic-angular';
 
 import { MyApp } from './app.component';
 
+import { AuthPage } from '../pages/auth/auth';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 import { ShiftsPage } from '../pages/shifts/shifts';
@@ -30,6 +31,7 @@ export function getAuthHttp(http) {
 @NgModule({
   declarations: [
     MyApp,
+    AuthPage,
     HomePage,
     TabsPage,
     ShiftsPage,
@@ -47,6 +49,7 @@ export function getAuthHttp(http) {
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
+    AuthPage,
     HomePage,
     TabsPage,
     ShiftsPage,
