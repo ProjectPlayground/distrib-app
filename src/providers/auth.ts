@@ -18,8 +18,6 @@ export class AuthService {
   jwtHelper: JwtHelper = new JwtHelper();
   auth0 = new Auth0({ clientID: Auth0Vars.AUTH0_CLIENT_ID, domain: Auth0Vars.AUTH0_DOMAIN });
   lock = new Auth0Lock(Auth0Vars.AUTH0_CLIENT_ID, Auth0Vars.AUTH0_DOMAIN, {
-    redirect: false,
-    autoclose: true,
     avatar: null,
     closable: false,
     rememberLastLogin: false,
