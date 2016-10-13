@@ -39,7 +39,7 @@ export class MyApp {
     this.events.subscribe('user:login', () => {
 	    setTimeout(() => {
 	      this.nav.setRoot(TabsPage);
-	    }, 300);
+	    }, 0);
     });
     this.events.subscribe('user:signup', () => {
     });

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 
 import { Storage } from '@ionic/storage';
+import { SecureStorage } from 'ionic-native';
 import { IonicApp, IonicModule } from 'ionic-angular';
 
 import { MyApp } from './app.component';
@@ -63,6 +64,7 @@ export function getAuthHttp(http) {
   ],
   providers: [
     Storage,
+    SecureStorage,
     DeliveryData,
     AuthService,
     { 

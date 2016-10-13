@@ -1,5 +1,6 @@
 import { Events } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
+import { SecureStorage } from 'ionic-native';
 import { AuthHttp, JwtHelper, tokenNotExpired } from 'angular2-jwt';
 import { Injectable, NgZone } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
@@ -39,6 +40,7 @@ export class AuthService {
     }
   });
 
+  local: SecureStorage;
   refreshSubscription: any;
   user: any;
   zoneImpl: NgZone;
@@ -47,16 +49,19 @@ export class AuthService {
     public events: Events,
   	private authHttp: AuthHttp, 
   	zone: NgZone,
+    local: SecureStorage
 	) {
     this.zoneImpl = zone;
-    this.lock.show();
+    this.local = local;
 
-    if(localStorage.getItem('profile'))
+    if (localStorage.getItem('profile')) {
       this.user = localStorage.getItem('profile');
+    }
 
     // Check if there is a profile saved in local storage
     // this.local.get('profile').then(profile => {
     //   this.user = JSON.parse(profile);
+    //   console.log(this.user);
     // }).catch(error => {
     //   console.log(error);
     // });
