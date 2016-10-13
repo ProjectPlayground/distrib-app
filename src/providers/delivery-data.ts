@@ -1,5 +1,5 @@
 import { Events } from 'ionic-angular';
-// import { Storage } from '@ionic/storage';
+import { Storage } from '@ionic/storage';
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
@@ -17,7 +17,7 @@ export class DeliveryData {
   	public authHttp: AuthHttp, 
   	public auth: AuthService, 
   	public events: Events, 
-  	// public storage: Storage
+  	public storage: Storage
  	) {}
 
   getShifts(filters?) {
