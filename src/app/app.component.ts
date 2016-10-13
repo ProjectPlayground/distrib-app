@@ -25,11 +25,12 @@ export class MyApp {
   ) {
     platform.ready().then(() => {
       StatusBar.styleDefault();
-    });
-    // Check to see if user authenticated, if not then display auth0
+          // Check to see if user authenticated, if not then display auth0
     if (!this.auth.authenticated()) {
       this.auth.login();
     }
+    });
+
     this.listenToLoginEvents();
   }
 
