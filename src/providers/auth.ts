@@ -21,6 +21,7 @@ export class AuthService {
     avatar: null,
     closable: false,
     rememberLastLogin: false,
+    container: "authContainer",
     theme: {
       logo: "https://dl.dropboxusercontent.com/s/wd0og2bqy7z7uuk/Picture1.png?dl=0",
       primaryColor: "green"

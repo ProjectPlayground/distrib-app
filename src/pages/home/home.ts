@@ -12,8 +12,4 @@ export class HomePage {
 
   }
 
-  	login() {
-		this.auth.lock.show();
-	}
-
 }
