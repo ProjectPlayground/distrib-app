@@ -49,7 +49,6 @@ export class ShiftsDetailPage {
           this.delivData.deleteShift(this.shift)
           .subscribe(data => {
             this.navCtrl.pop();
-            this.navCtrl.pop();
           }, err => {
             this.handleError(err);
           });

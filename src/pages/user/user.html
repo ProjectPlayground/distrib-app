@@ -12,11 +12,12 @@
       <ion-avatar item-left>
         <img src="{{ auth.user.picture }}">
       </ion-avatar>
-      <h2>{{ auth.user.nickname }}</h2>
+      <h2>{{ auth.user.name }}</h2>
       <p>{{ auth.user.email }}</p>
     </ion-item>
     <ion-item>
-      <p>User id: {{auth.user._id}}</p>
+      <p>ID: {{auth.user._id}}</p>
+      <p>Role: {{auth.user.role}}</p>
       <p>Last login: {{auth.user.lastLogin | date:"fullDate"}}</p>
     </ion-item>
   

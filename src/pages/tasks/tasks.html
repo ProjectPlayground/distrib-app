@@ -26,7 +26,7 @@
       No shift... Please view a shift!
     </ion-list-header>
   </ion-list>
-  <ion-list *ngIf="segment === 'list' && currentShift.waypoints">
+  <ion-list *ngIf="segment === 'list' && currentShift.waypoints" no-lines>
     <ion-list-header style="text-align: center" [hidden]="currentShift.waypoints.length > 0">
       No tasks... Pull down to refresh!
     </ion-list-header>
@@ -35,26 +35,26 @@
         <b>Start location</b> <ion-icon name="home"></ion-icon>
         <p style="float: right;">Shift start: <b>{{currentShift.startTime | date:"shortTime"}}</b></p>
       </h3>
-      <h4>
-        <span *ngIf="currentShift.address.address1">
-          {{currentShift.address.address1}}
-          {{currentShift.address.city}}, {{currentShift.address.postal}}
-        </span>
-      </h4>
-      <h6>
-       Lat: {{currentShift.location?.latitude}}<br>Lon: {{currentShift.location?.longitude}}
+      <h4 *ngIf="currentShift.address.address1">
+        {{currentShift.address.address1}}<br>
+        {{currentShift.address.city}}, {{currentShift.address.postal}}
         <p style="float: right;">Depart by: <b>{{currentShift.stats?.actualStart | date:"shortTime"}}</b></p>
-      </h6>
+      </h4>
+      <h4 *ngIf="!currentShift.address.address1">
+        Lat: {{currentShift.location?.latitude}}<br>
+        Lon: {{currentShift.location?.longitude}}
+        <p style="float: right;">Depart by: <b>{{currentShift.stats?.actualStart | date:"shortTime"}}</b></p>
+      </h4>
     </button>
     <div *ngFor="let waypoint of currentShift.waypoints; let i=index">
       <ion-item-divider light class="capitalize">
         <ion-badge item-left>{{alphabet[i]}}</ion-badge>
-          <span style="float: right;">
-            <ion-icon name="car"></ion-icon> {{getMinutes(waypoint.timeFromPrevious)}} min -
-              <span *ngIf="waypoint.status === 'incomplete'" style="color: red">Incomplete</span>
-              <span *ngIf="waypoint.status === 'active'" style="color: blue">Active</span>
-              <span *ngIf="waypoint.status === 'complete'" style="color: green">Complete</span>
-          </span>
+        <span style="float: right;">
+          <ion-icon name="car"></ion-icon> {{getMinutes(waypoint.timeFromPrevious)}} min -
+            <span *ngIf="waypoint.status === 'incomplete'" style="color: red">Incomplete</span>
+            <span *ngIf="waypoint.status === 'active'" style="color: blue">Active</span>
+            <span *ngIf="waypoint.status === 'complete'" style="color: green">Complete</span>
+        </span>
       </ion-item-divider>
       <ion-item-sliding>
         <button ion-item detail-none class="capitalize" (click)="viewTask(waypoint, i)">
