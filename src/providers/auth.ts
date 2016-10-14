@@ -19,7 +19,6 @@ export class AuthService {
   auth0 = new Auth0({ clientID: Auth0Vars.AUTH0_CLIENT_ID, domain: Auth0Vars.AUTH0_DOMAIN });
   lock = new Auth0Lock(Auth0Vars.AUTH0_CLIENT_ID, Auth0Vars.AUTH0_DOMAIN, {
     avatar: null,
-    autoclose: true,
     rememberLastLogin: false,
     container: "authContainer",
     theme: {
@@ -28,7 +27,7 @@ export class AuthService {
     },
     socialButtonStyle: 'small',
     languageDictionary: {
-      title: "Welcome to the future!"
+      title: "Drive for the future!"
     },
     auth: {
       redirect: false,
@@ -78,7 +77,7 @@ export class AuthService {
           error => alert(error)
          );
       });
-      this.lock.hide();
+      // important to remove lock.hide() or keyboard doesnt hide
       localStorage.setItem('refresh_token', authResult.refreshToken);
       this.zoneImpl.run(() => this.user = authResult.profile);
       // Schedule a token refresh
