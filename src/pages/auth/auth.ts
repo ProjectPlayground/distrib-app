@@ -10,14 +10,16 @@ import { TabsPage } from '../tabs/tabs';
 export class AuthPage {
 
   constructor(public navCtrl: NavController, public auth: AuthService) {
-	  // Tabs Page if user authenticated
-	  if (this.auth.authenticated()) {
-	  	this.navCtrl.setRoot(TabsPage);
-	  }
+
   }
 
-  ionViewDidEnter() {
-    this.auth.login();
+  ionViewWillEnter() {
+    // check if user authenticated
+    if (this.auth.authenticated()) {
+      this.navCtrl.setRoot(TabsPage);
+    } else {
+      this.auth.login();
+    }
   }
 
 }

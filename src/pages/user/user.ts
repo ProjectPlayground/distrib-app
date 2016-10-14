@@ -9,7 +9,7 @@ import { AuthService } from '../../providers/auth';
 export class UserPage {
 
   constructor(public navCtrl: NavController, public auth: AuthService) {
-
+  	console.log(auth.user);
   }
 
 }

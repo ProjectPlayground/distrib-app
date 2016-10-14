@@ -15,6 +15,10 @@
       <h2>{{ auth.user.nickname }}</h2>
       <p>{{ auth.user.email }}</p>
     </ion-item>
+    <ion-item>
+      <p>User id: {{auth.user._id}}</p>
+      <p>Last login: {{auth.user.lastLogin | date:"fullDate"}}</p>
+    </ion-item>
   
   </ion-card>
 
