@@ -19,7 +19,7 @@ export class AuthService {
   auth0 = new Auth0({ clientID: Auth0Vars.AUTH0_CLIENT_ID, domain: Auth0Vars.AUTH0_DOMAIN });
   lock = new Auth0Lock(Auth0Vars.AUTH0_CLIENT_ID, Auth0Vars.AUTH0_DOMAIN, {
     avatar: null,
-    closable: false,
+    autoclose: true,
     rememberLastLogin: false,
     container: "authContainer",
     theme: {
