@@ -46,6 +46,11 @@ export class DeliveryData {
     return this.authHttp.delete(this.apiUrl+'shifts/'+shift._id)
   }
 
+  orderStatus(order, status) {
+    return this.authHttp.patch(this.apiUrl+'orders/'+order._id+'/status', {status: status})
+      .map(res => res.json());
+  }
+
   waypointStatus(shift, waypoint, status) {
     return this.authHttp.patch(this.apiUrl+'shifts/'+shift._id+'/waypoints/'+waypoint._id, {status: status})
       .map(res => res.json());

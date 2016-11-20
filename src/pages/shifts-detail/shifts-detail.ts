@@ -8,6 +8,8 @@ import { DeliveryData } from '../../providers/delivery-data';
 })
 export class ShiftsDetailPage {
   shift: any = {};
+  billableTime;
+  travelTime;
   constructor (
   	public navCtrl: NavController, 
   	public navParams: NavParams,
@@ -15,19 +17,13 @@ export class ShiftsDetailPage {
   	public alertCtrl: AlertController
   ) {
   	this.shift = navParams.data;
-  }
-
-  activeShift() {
-
-  }
-
-  completeShift() {
-    
+    this.billableTime = Math.round(this.shift.stats.totalBillableTime/60);
+    this.travelTime = Math.round(this.shift.stats.totalTravelTime/60);
   }
 
   selectShift() {
     let alert = this.alertCtrl.create({
-      title: 'View this shift?',
+      title: 'Select this shift?',
       buttons: ['Cancel',
       {
         text: 'Confirm',
