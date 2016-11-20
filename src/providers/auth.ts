@@ -33,7 +33,7 @@ export class AuthService {
     auth: {
       redirect: false,
       params: {
-        scope: 'openid email offline_access',
+        scope: 'openid email offline_access'
       }
     }
   });
