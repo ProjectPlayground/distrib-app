@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>Task {{alphabet[taskIndex]}}</ion-title>
+    <ion-title class="capitalize">Task {{alphabet[taskIndex]}} - {{currentTask.activity}}</ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -38,22 +38,26 @@
 		</ion-toolbar>
 	</ion-card>
 	<ion-card class="capitalize">
-	  <ion-item *ngIf="currentTask.activity === 'pickup'">
-	    <ion-icon name="basket" item-left large></ion-icon>
-	    <h3>Pickup packages</h3>
-	    <p *ngFor="let order of currentTask.orders">
-	    	Order #<b>{{order.orderID}}</b> for {{order.customerName}}
-	    </p>
-	  </ion-item>
-	  <ion-item *ngIf="currentTask.activity === 'delivery'">
-	    <ion-icon name="basket" item-left large></ion-icon>
-	    <h3>Delivery</h3>
-	    <p *ngFor="let order of currentTask.orders">
-	    	Order #<b>{{order.orderID}}</b> for {{order.customerName}}
-	    </p>
-	  </ion-item>
-    <ion-toolbar *ngIf="taskStatus!=='imcomplete'">
-	  	<button ion-button color="secondary" small block *ngIf="taskStatus==='active'" (click)="completeTask()">Complete!</button>
+		<div *ngIf="currentTask.activity === 'pickup'">
+	  	<ion-item *ngFor="let order of currentTask.orders">
+			<button ion-button icon-only item-right (click)="contactModal()"><ion-icon name="call" large></ion-icon></button>
+		    <h3>Pickup package</h3>
+		    <p>
+		    	Order #<b>{{order.orderID}}</b> for {{order.customerName}}
+		    </p>
+  		</ion-item>
+		</div>
+		<div *ngFor="let order of currentTask.orders">
+	  	<ion-item *ngIf="currentTask.activity === 'delivery'">
+			<button ion-button icon-only item-right (click)="contactModal()"><ion-icon name="call" large></ion-icon></button>
+		    <h3>Deliver package</h3>
+		    <p>
+		    	Order #<b>{{order.orderID}}</b> for {{order.customerName}}
+		    </p>
+	  	</ion-item>
+  	</div>
+  	<ion-toolbar *ngIf="taskStatus!=='incomplete'">
+	  	<button ion-button color="secondary" small block *ngIf="taskStatus==='active'" (click)="completeTask()">Complete</button>
 	  	<button ion-button color="secondary" small block *ngIf="taskStatus==='complete'" disabled>Completed</button>
 		</ion-toolbar>
 	</ion-card>

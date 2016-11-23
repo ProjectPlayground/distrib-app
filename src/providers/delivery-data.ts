@@ -38,6 +38,7 @@ export class DeliveryData {
   }
 
   postShift(shift) {
+    console.log(shift);
     return this.authHttp.post(this.apiUrl+'shifts', shift)
       .map(res => res.json());
   }
