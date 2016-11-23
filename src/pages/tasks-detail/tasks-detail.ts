@@ -90,6 +90,27 @@ export class TasksDetailPage {
     });
   }
 
+  contactModal(order) {
+    var subString = '';
+    if (order.deliveryOptions.contact.knock) {
+      subString += 'Knock<br>';
+    } 
+    if (order.deliveryOptions.contact.doorbell) {
+      subString += 'Doorbell<br>';
+    }
+    if (order.deliveryOptions.contact.phone) {
+      subString += 'Call <a href="tel:'+order.deliveryOptions.phoneNum+'">'+order.deliveryOptions.phoneNum+'</a><br>';
+    }
+    if (order.deliveryOptions.contact.other) {
+      subString += 'Note: '+order.deliveryOptions.note;
+    }
+    let alert = this.alertCtrl.create({
+      title: subString,
+      buttons: ['OK']
+    });
+    alert.present();
+  }
+
   getGoogleMapsURL() {
     return 'https://www.google.ca/maps/place/' +
       this.currentTask.address.address1 + ',' +

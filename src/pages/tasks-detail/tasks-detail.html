@@ -40,7 +40,7 @@
 	<ion-card class="capitalize">
 		<div *ngIf="currentTask.activity === 'pickup'">
 	  	<ion-item *ngFor="let order of currentTask.orders">
-			<button ion-button icon-only item-right (click)="contactModal()"><ion-icon name="call" large></ion-icon></button>
+			<button ion-button icon-only clear item-right (click)="contactModal(order)"><ion-icon name="call"></ion-icon></button>
 		    <h3>Pickup package</h3>
 		    <p>
 		    	Order #<b>{{order.orderID}}</b> for {{order.customerName}}
@@ -49,7 +49,7 @@
 		</div>
 		<div *ngFor="let order of currentTask.orders">
 	  	<ion-item *ngIf="currentTask.activity === 'delivery'">
-			<button ion-button icon-only item-right (click)="contactModal()"><ion-icon name="call" large></ion-icon></button>
+			<button ion-button icon-only clear item-right (click)="contactModal(order)"><ion-icon name="call"></ion-icon></button>
 		    <h3>Deliver package</h3>
 		    <p>
 		    	Order #<b>{{order.orderID}}</b> for {{order.customerName}}
