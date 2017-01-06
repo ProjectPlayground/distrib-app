@@ -1,5 +1,5 @@
 import { Events } from 'ionic-angular';
-// import { Storage } from '@ionic/storage';
+import { Storage } from '@ionic/storage';
 import { AuthHttp, JwtHelper, tokenNotExpired } from 'angular2-jwt';
 import { Injectable, NgZone } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
@@ -47,6 +47,7 @@ export class AuthService {
     public events: Events,
   	private authHttp: AuthHttp, 
   	zone: NgZone,
+    public storage: Storage
 	) {
     this.zoneImpl = zone;
     if (localStorage.getItem('profile')) {
